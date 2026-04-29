@@ -114,7 +114,6 @@ function getPrompt() {
     case 'login': return 'Username: ';
     case 'user': return username + '@' + HOSTNAME + '>';
     case 'enable': return username + '@' + HOSTNAME + '#';
-    case 'config': return username + '@' + HOSTNAME + '(config)#';
   }
 }
 
@@ -141,12 +140,12 @@ function escapeHtml(str) {
 }
 
 function showVersion() {
-  return 'Jakob Internet Operating System (JakobOS)\n' +
+  return 'Portfolio Repository System\n' +
     'Copyright (c) Jakob Jonasson. All rights reserved.\n\n' +
-    'JakobOS Software, Version 1.0.0\n' +
+    'Jonasson Software, Version 1.0.2\n' +
     'Compiled ' + new Date().toLocaleDateString('en-US', { weekday: 'short', year: 'numeric', month: 'short', day: 'numeric' }) + '\n\n' +
     'ROM: System Bootstrap, Version 1.0\n' +
-    'BOOTLDR: JakobOS Boot Loader, Version 1.0\n\n' +
+    'BOOTLDR: PRS Boot Loader, Version 1.0\n\n' +
     'System returned to ROM by power-on\n' +
     'System image file is "flash:jakobos-portfolio.bin"\n\n' +
     'Portfolio uptime is since ' + new Date().toUTCString() + '\n' +
@@ -163,70 +162,85 @@ function showAbout() {
     ' \\___/ \\__,_|_|\\_\\___/|_.__/ \n\n' +
     'Jakob Jonasson\n' +
     '────────────────────────────────\n\n' +
-    'TODO: Write a short bio here.\n' +
-    'Describe who you are, what you do,\n' +
-    'and what gets you excited.';
+    'Network engineer with hands-on experience designing, deploying,\n' +
+    'and troubleshooting enterprise network infrastructure in Cisco environments.\n' +
+    'Background spans LAN/WAN architecture, VLAN segmentation, VPN/IPsec, OSPF,\n' +
+    'HSRP, 802.1X, next-generation firewalls, and CJIS compliance.\n' +
+    'Proven ability to lead network migration projects from design through\n' +
+    'post-cutover support. CCNA, Security+, and AWS Solutions Architect certified\n';
 }
 
 function showResume() {
   return '! --- Experience ---\n\n' +
-    'interface Career/0\n' +
-    ' description Job Title at Company Name\n' +
-    ' bandwidth 2023 - Present\n' +
+    'interface C0/0\n' +
+    ' description Central Sterile OR Liaison & Supervisor\n' +
+    ' ! Altru Health System – Grand Forks, ND / Duke Health – Raleigh, NC\n' +
+    ' ! Jun 2016 - May 2024\n' +
     ' !\n' +
-    ' ! Placeholder responsibility\n' +
-    ' ! Placeholder achievement\n' +
-    ' no shutdown\n\n' +
-    'interface Career/1\n' +
-    ' description Job Title at Company Name\n' +
-    ' bandwidth 2021 - 2023\n' +
-    ' !\n' +
-    ' ! Placeholder responsibility\n' +
-    ' ! Placeholder achievement\n' +
+    ' ! Managed departmental operations, staffing, and procurement across sterile\n' +
+    ' !   processing and surgical support functions at two health systems.\n' +
+    ' ! Conducted inventory audits and reconciled database records with on-hand stock,\n' +
+    ' !   improving data integrity and reducing stockouts.\n' +
     ' shutdown\n\n' +
-    '! --- Education ---\n\n' +
-    'interface Education/0\n' +
-    ' description Degree at University Name\n' +
-    ' bandwidth 2017 - 2021\n' +
+    'interface C0/1\n' +
+    ' description Data Center Technician at Core Scientific – Grand Forks, ND\n' +
+    ' ! Dec 2023 - Oct 2024\n' +
+    ' !\n' +
+    ' ! Installed, cabled, and maintained servers and networking equipment in a\n' +
+    ' !   large-scale enterprise data center ensuring reliable infrastructure availability.\n' +
+    ' ! Performed racking, cabling, hardware audits, and inventory management to\n' +
+    ' !   support accurate asset tracking and lifecycle management.\n' +
+    ' ! Conducted diagnostics, break/fix repairs, and preventive maintenance on\n' +
+    ' !   servers and network hardware, reducing downtime and improving performance.\n' +
+    ' ! Led deployment of 7,000+ assets, beating installation schedules and\n' +
+    ' !   critical project deadlines.\n' +
+    ' ! Developed Python tool to identify servers failing asset tracking systems,\n' +
+    ' !   improving reporting accuracy and reducing manual audit effort.\n' +
+    ' shutdown\n\n' +
+    'interface C0/2\n' +
+    ' description Network Engineer at Twotrees Technologies – Grand Forks, ND\n' +
+    ' ! Oct 2024 - Present\n' +
+    ' !\n' +
+    ' ! Designed, implemented, and managed network solutions tailored to customer\n' +
+    ' !   requirements, improving performance and reliability across multiple environments.\n' +
+    ' ! Planned and executed multi-site network integration across 5 locations with 300+\n' +
+    ' !   devices: Cisco wireless controllers (HA SSO), NGFWs, OSPF-to-static migration\n' +
+    ' !   with HSRP HA for OT networks, and post-cutover support.\n' +
+    ' ! Led CJIS compliance initiatives including VLAN segmentation design,\n' +
+    ' !   BitLocker/FIPS enforcement, and 802.1X planning with NPS/EAP-TLS.\n' +
+    ' ! Implemented Duo MFA for Cisco AnyConnect VPN via SAML SSO with Entra ID\n' +
+    ' !   integration, including end-to-end configuration, testing, and documentation.\n' +
+    ' ! Deployed EDR across 100+ client environments; led incident response efforts\n' +
+    ' !   and SonicWall zero-day vulnerability mitigation.\n' +
+    ' ! Deployed PRTG for proactive monitoring with automated alerts and real-time\n' +
+    ' !   status dashboard integrated with internal digital signage.\n' +
+    ' ! Configured Windows Server (2012–2025) with Hyper-V VMs for domain controllers,\n' +
+    ' !   application servers, and file servers.\n' +
     ' no shutdown';
 }
 
 function showSkills() {
   return '! --- Technical Skills ---\n\n' +
-    'access-list 100 permit   Languages      TODO: e.g. Python, Go, JS\n' +
-    'access-list 200 permit   Frameworks     TODO: e.g. React, Django\n' +
-    'access-list 300 permit   Infra          TODO: e.g. AWS, Docker, K8s\n' +
-    'access-list 400 permit   Tools          TODO: e.g. Git, Terraform\n' +
-    'access-list 500 permit   Other          TODO: e.g. Linux, Networking';
+    'access-list 100 permit   Networking     Cisco IOS-XE, OSPF, HSRP, 802.1X/RADIUS,\n' +
+    '                                        VLAN Segmentation, VPN/IPsec, SD-WAN,\n' +
+    '                                        Meraki, Aruba\n' +
+    'access-list 200 permit   Security       SonicWall, Sophos XGS, Duo MFA/SAML SSO,\n' +
+    '                                        EDR/Incident Response, CJIS Compliance\n' +
+    'access-list 300 permit   Systems        Windows Server 2012–2025, Active Directory,\n' +
+    '                                        Hyper-V, Linux (Ubuntu), PRTG Monitoring\n' +
+    'access-list 400 permit   Automation     Python, AWS (Solutions Architect)';
 }
 
 function showProjects() {
   return '! --- Project Portfolio ---\n\n' +
-    'interface Project/0\n' +
-    ' description Project Name\n' +
-    ' ! TODO: Short description of the project.\n' +
-    ' ! Stack: TODO\n' +
-    ' ! Link:  https://github.com/jakobjonasson/TODO\n' +
-    ' no shutdown\n\n' +
-    'interface Project/1\n' +
-    ' description Project Name\n' +
-    ' ! TODO: Short description of the project.\n' +
-    ' ! Stack: TODO\n' +
-    ' ! Link:  https://github.com/jakobjonasson/TODO\n' +
-    ' no shutdown\n\n' +
-    'interface Project/2\n' +
-    ' description Project Name\n' +
-    ' ! TODO: Short description of the project.\n' +
-    ' ! Stack: TODO\n' +
-    ' ! Link:  https://github.com/jakobjonasson/TODO\n' +
-    ' no shutdown';
+    '! No projects configured yet. Check back soon.';
 }
 
 function showContact() {
   return '! --- Contact Information ---\n\n' +
-    'ip route Email        0.0.0.0 TODO@example.com\n' +
-    'ip route GitHub       0.0.0.0 github.com/TODO\n' +
-    'ip route LinkedIn     0.0.0.0 linkedin.com/in/TODO';
+    'ip route Email        46.5.5.87 jakob@jonasson.us\n' +
+    'ip route GitHub       22.0.0.0  https://github.com/jakobjonasson\n' + 
+    'ip route LinkedIn     10.0.0.0   https://www.linkedin.com/in/jakob-jonasson/';
 }
 
 function showRunningConfig() {
@@ -262,15 +276,9 @@ function showUserHelp() {
 
 function showEnableHelp() {
   return '  show                Show running system information\n' +
-    '  configure terminal  Enter configuration mode\n' +
     '  disable             Return to user mode\n' +
     '  clear               Clear the terminal\n' +
     '  help                Description of the interactive help system';
-}
-
-function showConfigHelp() {
-  return '  exit                Exit configuration mode\n' +
-    '  hostname            Set system hostname (just kidding)';
 }
 
 function showHelpText() {
@@ -302,7 +310,6 @@ function handleCommand(raw) {
   if (cmd === '?') {
     if (mode === 'user') appendLine(showUserHelp());
     else if (mode === 'enable') appendLine(showEnableHelp());
-    else if (mode === 'config') appendLine(showConfigHelp());
     return;
   }
 
@@ -324,12 +331,6 @@ function handleCommand(raw) {
   if (mode === 'enable') {
     if (cmd === 'disable' || cmd === 'dis') { mode = 'user'; updatePrompt(); return; }
     if (cmd === 'clear' || cmd === 'cl') { output.innerHTML = ''; return; }
-    if (cmd === 'configure terminal' || cmd === 'conf t') {
-      mode = 'config';
-      appendLine('Enter configuration commands, one per line. End with exit.');
-      updatePrompt();
-      return;
-    }
     if (cmd === 'show ?' || cmd === 'sh ?') { appendLine(showShowHelp()); return; }
     if (cmd === 'show about' || cmd === 'sh about' || cmd === 'sh ab') { appendLine(showAbout()); return; }
     if (cmd === 'show resume' || cmd === 'sh resume' || cmd === 'sh res') { appendLine(showResume()); return; }
@@ -341,23 +342,11 @@ function handleCommand(raw) {
     appendLine('% Invalid input detected at \'^\' marker.\n\n% Type \'?\' for a list of available commands.');
     return;
   }
-
-  // Config mode
-  if (mode === 'config') {
-    if (cmd === 'exit') { mode = 'enable'; updatePrompt(); return; }
-    if (cmd.startsWith('hostname')) {
-      appendLine('% Nice try. Hostname is always ' + HOSTNAME + '.');
-      return;
-    }
-    appendLine('% Invalid input detected at \'^\' marker.');
-    return;
-  }
 }
 
 function getCompletions() {
   if (mode === 'user') return ['enable', 'help', 'show version'];
-  if (mode === 'enable') return ['show about', 'show resume', 'show skills', 'show projects', 'show contact', 'show version', 'show running-config', 'configure terminal', 'disable', 'clear', 'help'];
-  if (mode === 'config') return ['exit', 'hostname'];
+  if (mode === 'enable') return ['show about', 'show resume', 'show skills', 'show projects', 'show contact', 'show version', 'show running-config', 'disable', 'clear', 'help'];
   return [];
 }
 
@@ -381,6 +370,22 @@ async function spinLine(prefix, ms) {
   inner.textContent = prefix + 'OK';
 }
 
+async function progressBar(ms) {
+  const width = 55;
+  const div = document.createElement('div');
+  div.className = 'output-block';
+  const inner = document.createElement('div');
+  inner.className = 'response';
+  div.appendChild(inner);
+  output.appendChild(div);
+  for (let i = 0; i <= width; i++) {
+    const pct = Math.round((i / width) * 100).toString().padStart(3, ' ');
+    inner.textContent = '[' + '#'.repeat(i) + ' '.repeat(width - i) + '] ' + pct + '%';
+    output.scrollTop = output.scrollHeight;
+    if (i < width) await sleep(ms / width);
+  }
+}
+
 async function boot() {
   input.disabled = true;
 
@@ -395,14 +400,15 @@ async function boot() {
   await sleep(120);
 
   print('Loading jakobos-portfolio.bin .............................');
-  await sleep(350);
+  await progressBar(750);
+  await sleep(150);
 
   print(
     '##############################################################\n\n' +
-    '              JakobOS Portfolio System\n' +
-    '              Version 1.0.0\n\n' +
-    '              Copyright (c) Jakob Jonasson\n' +
-    '              All rights reserved.\n\n' +
+    '         Jonasson Software Portfolio Repository System\n'          +
+    '                        Version 1.0.0\n\n'                      +                          
+    '                 Copyright (c) Jakob Jonasson\n'                +
+    '                    All rights reserved.\n\n'                   +
     '##############################################################'
   );
   await sleep(200);
