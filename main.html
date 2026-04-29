@@ -1,0 +1,464 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Jakob Jonasson</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --bg: #000;
+    --fg: #e0e0e0;
+    --dim: #777;
+    --accent: #fff;
+    --cursor-color: #e0e0e0;
+    --selection-bg: #e0e0e0;
+    --selection-fg: #000;
+  }
+
+  ::selection { background: var(--selection-bg); color: var(--selection-fg); }
+
+  html, body {
+    height: 100%;
+    overflow: hidden;
+    background: var(--bg);
+    color: var(--fg);
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 14px;
+    line-height: 1.5;
+  }
+
+  #terminal {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    height: 100vh;
+    padding: 20px;
+  }
+
+  #output {
+    flex: 1;
+    overflow-y: auto;
+    padding-bottom: 8px;
+  }
+
+  .output-block { margin-bottom: 4px; }
+
+  .prompt-line { color: var(--fg); }
+
+  .response {
+    white-space: pre-wrap;
+    word-break: break-word;
+    color: var(--fg);
+  }
+
+  .dim { color: var(--dim); }
+  .bright { color: var(--accent); }
+
+  .input-line {
+    display: flex;
+    align-items: center;
+    flex-shrink: 0;
+  }
+  .input-prompt {
+    color: var(--fg);
+    flex-shrink: 0;
+  }
+  #command-input {
+    background: none;
+    border: none;
+    color: var(--fg);
+    font-family: inherit;
+    font-size: inherit;
+    outline: none;
+    flex: 1;
+    caret-color: var(--cursor-color);
+    line-height: 1.5;
+  }
+
+  @media (max-width: 600px) {
+    html { font-size: 13px; }
+    #terminal { padding: 10px; }
+  }
+</style>
+</head>
+<body>
+
+<div id="terminal">
+  <div id="output"></div>
+  <div class="input-line">
+    <span class="input-prompt" id="prompt-display">Username: </span>
+    <input type="text" id="command-input" autofocus autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false">
+  </div>
+</div>
+
+<script>
+let mode = 'login';
+const HOSTNAME = 'Jakob';
+let username = '';
+let history = [];
+let historyIndex = -1;
+let tabMatches = [];
+let tabIndex = -1;
+let tabOriginal = '';
+
+const output = document.getElementById('output');
+const input = document.getElementById('command-input');
+const promptDisplay = document.getElementById('prompt-display');
+
+function getPrompt() {
+  switch (mode) {
+    case 'login': return 'Username: ';
+    case 'user': return username + '@' + HOSTNAME + '>';
+    case 'enable': return username + '@' + HOSTNAME + '#';
+    case 'config': return username + '@' + HOSTNAME + '(config)#';
+  }
+}
+
+function updatePrompt() {
+  promptDisplay.textContent = getPrompt();
+}
+
+function appendLine(text) {
+  const div = document.createElement('div');
+  div.className = 'output-block';
+  div.innerHTML = '<div class="response">' + text + '</div>';
+  output.appendChild(div);
+}
+
+function appendPromptLine(cmd) {
+  const div = document.createElement('div');
+  div.className = 'output-block';
+  div.innerHTML = '<div class="prompt-line">' + getPrompt() + escapeHtml(cmd) + '</div>';
+  output.appendChild(div);
+}
+
+function escapeHtml(str) {
+  return str.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+}
+
+function showVersion() {
+  return 'Jakob Internet Operating System (JakobOS)\n' +
+    'Copyright (c) Jakob Jonasson. All rights reserved.\n\n' +
+    'JakobOS Software, Version 1.0.0\n' +
+    'Compiled ' + new Date().toLocaleDateString('en-US', { weekday: 'short', year: 'numeric', month: 'short', day: 'numeric' }) + '\n\n' +
+    'ROM: System Bootstrap, Version 1.0\n' +
+    'BOOTLDR: JakobOS Boot Loader, Version 1.0\n\n' +
+    'System returned to ROM by power-on\n' +
+    'System image file is "flash:jakobos-portfolio.bin"\n\n' +
+    'Portfolio uptime is since ' + new Date().toUTCString() + '\n' +
+    'System restarted by power-on\n\n' +
+    'Configuration register is 0x2102';
+}
+
+function showAbout() {
+  return '\n' +
+    '     _       _         _     \n' +
+    '    | | __ _| | _____ | |__  \n' +
+    ' _  | |/ _` | |/ / _ \\| \'_ \\ \n' +
+    '| |_| | (_| |   < (_) | |_) |\n' +
+    ' \\___/ \\__,_|_|\\_\\___/|_.__/ \n\n' +
+    'Jakob Jonasson\n' +
+    '────────────────────────────────\n\n' +
+    'TODO: Write a short bio here.\n' +
+    'Describe who you are, what you do,\n' +
+    'and what gets you excited.';
+}
+
+function showResume() {
+  return '! --- Experience ---\n\n' +
+    'interface Career/0\n' +
+    ' description Job Title at Company Name\n' +
+    ' bandwidth 2023 - Present\n' +
+    ' !\n' +
+    ' ! Placeholder responsibility\n' +
+    ' ! Placeholder achievement\n' +
+    ' no shutdown\n\n' +
+    'interface Career/1\n' +
+    ' description Job Title at Company Name\n' +
+    ' bandwidth 2021 - 2023\n' +
+    ' !\n' +
+    ' ! Placeholder responsibility\n' +
+    ' ! Placeholder achievement\n' +
+    ' shutdown\n\n' +
+    '! --- Education ---\n\n' +
+    'interface Education/0\n' +
+    ' description Degree at University Name\n' +
+    ' bandwidth 2017 - 2021\n' +
+    ' no shutdown';
+}
+
+function showSkills() {
+  return '! --- Technical Skills ---\n\n' +
+    'access-list 100 permit   Languages      TODO: e.g. Python, Go, JS\n' +
+    'access-list 200 permit   Frameworks     TODO: e.g. React, Django\n' +
+    'access-list 300 permit   Infra          TODO: e.g. AWS, Docker, K8s\n' +
+    'access-list 400 permit   Tools          TODO: e.g. Git, Terraform\n' +
+    'access-list 500 permit   Other          TODO: e.g. Linux, Networking';
+}
+
+function showProjects() {
+  return '! --- Project Portfolio ---\n\n' +
+    'interface Project/0\n' +
+    ' description Project Name\n' +
+    ' ! TODO: Short description of the project.\n' +
+    ' ! Stack: TODO\n' +
+    ' ! Link:  https://github.com/jakobjonasson/TODO\n' +
+    ' no shutdown\n\n' +
+    'interface Project/1\n' +
+    ' description Project Name\n' +
+    ' ! TODO: Short description of the project.\n' +
+    ' ! Stack: TODO\n' +
+    ' ! Link:  https://github.com/jakobjonasson/TODO\n' +
+    ' no shutdown\n\n' +
+    'interface Project/2\n' +
+    ' description Project Name\n' +
+    ' ! TODO: Short description of the project.\n' +
+    ' ! Stack: TODO\n' +
+    ' ! Link:  https://github.com/jakobjonasson/TODO\n' +
+    ' no shutdown';
+}
+
+function showContact() {
+  return '! --- Contact Information ---\n\n' +
+    'ip route Email        0.0.0.0 TODO@example.com\n' +
+    'ip route GitHub       0.0.0.0 github.com/TODO\n' +
+    'ip route LinkedIn     0.0.0.0 linkedin.com/in/TODO';
+}
+
+function showRunningConfig() {
+  return 'Building configuration...\n\n' +
+    'Current configuration : 420 bytes\n' +
+    '!\n' +
+    'version 1.0\n' +
+    '!\n' +
+    'hostname ' + HOSTNAME + '\n' +
+    '!\n' +
+    showResume() + '\n!\n' +
+    showSkills() + '\n!\n' +
+    showProjects() + '\n!\n' +
+    showContact() + '\n!\n' +
+    'end';
+}
+
+function showShowHelp() {
+  return '  about               Display bio and summary\n' +
+    '  resume              Display work experience and education\n' +
+    '  skills              Display technical skills\n' +
+    '  projects            Display project portfolio\n' +
+    '  contact             Display contact information\n' +
+    '  version             System hardware and software status\n' +
+    '  running-config      Display current running configuration';
+}
+
+function showUserHelp() {
+  return '  enable              Turn on privileged commands\n' +
+    '  help                Description of the interactive help system\n' +
+    '  show version        System hardware and software status';
+}
+
+function showEnableHelp() {
+  return '  show                Show running system information\n' +
+    '  configure terminal  Enter configuration mode\n' +
+    '  disable             Return to user mode\n' +
+    '  clear               Clear the terminal\n' +
+    '  help                Description of the interactive help system';
+}
+
+function showConfigHelp() {
+  return '  exit                Exit configuration mode\n' +
+    '  hostname            Set system hostname (just kidding)';
+}
+
+function showHelpText() {
+  return 'Help may be requested at any point in a command by entering\n' +
+    'a question mark \'?\'. If nothing matches, the help list will\n' +
+    'be empty and you must back up until entering a \'?\' shows the\n' +
+    'available options.\n\n' +
+    'Two styles of help are provided:\n' +
+    '1. Full help is available when you are ready to enter a\n' +
+    '   command argument (e.g. \'show ?\') and describes each\n' +
+    '   possible argument.\n' +
+    '2. Partial help is provided when an abbreviated argument\n' +
+    '   is entered and you want to know what arguments match the\n' +
+    '   input (e.g. \'sh?\').';
+}
+
+function handleCommand(raw) {
+  if (mode === 'login') {
+    username = raw.trim() || 'guest';
+    mode = 'user';
+    appendLine('Type <span class="bright">enable</span> to enter privileged mode, or <span class="bright">?</span> for help.\n');
+    updatePrompt();
+    return;
+  }
+
+  const cmd = raw.trim().toLowerCase();
+  if (cmd === '') return;
+
+  if (cmd === '?') {
+    if (mode === 'user') appendLine(showUserHelp());
+    else if (mode === 'enable') appendLine(showEnableHelp());
+    else if (mode === 'config') appendLine(showConfigHelp());
+    return;
+  }
+
+  if (cmd === 'help') { appendLine(showHelpText()); return; }
+
+  // User mode
+  if (mode === 'user') {
+    if (cmd === 'enable' || cmd === 'en') { mode = 'enable'; updatePrompt(); return; }
+    if (cmd === 'show version' || cmd === 'sh ver') { appendLine(showVersion()); return; }
+    if (cmd === 'show ?' || cmd === 'sh ?') {
+      appendLine('  version             System hardware and software status');
+      return;
+    }
+    appendLine('% Unknown command or insufficient privilege level. Type \'?\' for help.');
+    return;
+  }
+
+  // Enable mode
+  if (mode === 'enable') {
+    if (cmd === 'disable' || cmd === 'dis') { mode = 'user'; updatePrompt(); return; }
+    if (cmd === 'clear' || cmd === 'cl') { output.innerHTML = ''; return; }
+    if (cmd === 'configure terminal' || cmd === 'conf t') {
+      mode = 'config';
+      appendLine('Enter configuration commands, one per line. End with exit.');
+      updatePrompt();
+      return;
+    }
+    if (cmd === 'show ?' || cmd === 'sh ?') { appendLine(showShowHelp()); return; }
+    if (cmd === 'show about' || cmd === 'sh about' || cmd === 'sh ab') { appendLine(showAbout()); return; }
+    if (cmd === 'show resume' || cmd === 'sh resume' || cmd === 'sh res') { appendLine(showResume()); return; }
+    if (cmd === 'show skills' || cmd === 'sh skills' || cmd === 'sh sk') { appendLine(showSkills()); return; }
+    if (cmd === 'show projects' || cmd === 'sh projects' || cmd === 'sh proj') { appendLine(showProjects()); return; }
+    if (cmd === 'show contact' || cmd === 'sh contact' || cmd === 'sh con') { appendLine(showContact()); return; }
+    if (cmd === 'show version' || cmd === 'sh ver') { appendLine(showVersion()); return; }
+    if (cmd === 'show running-config' || cmd === 'sh run') { appendLine(showRunningConfig()); return; }
+    appendLine('% Invalid input detected at \'^\' marker.\n\n% Type \'?\' for a list of available commands.');
+    return;
+  }
+
+  // Config mode
+  if (mode === 'config') {
+    if (cmd === 'exit') { mode = 'enable'; updatePrompt(); return; }
+    if (cmd.startsWith('hostname')) {
+      appendLine('% Nice try. Hostname is always ' + HOSTNAME + '.');
+      return;
+    }
+    appendLine('% Invalid input detected at \'^\' marker.');
+    return;
+  }
+}
+
+function getCompletions() {
+  if (mode === 'user') return ['enable', 'help', 'show version'];
+  if (mode === 'enable') return ['show about', 'show resume', 'show skills', 'show projects', 'show contact', 'show version', 'show running-config', 'configure terminal', 'disable', 'clear', 'help'];
+  if (mode === 'config') return ['exit', 'hostname'];
+  return [];
+}
+
+function sleep(ms) { return new Promise(r => setTimeout(r, ms)); }
+
+async function spinLine(prefix, ms) {
+  const frames = ['/', '|', '\\', '-'];
+  const div = document.createElement('div');
+  div.className = 'output-block';
+  const inner = document.createElement('div');
+  inner.className = 'response';
+  inner.textContent = prefix + frames[0];
+  div.appendChild(inner);
+  output.appendChild(div);
+  output.scrollTop = output.scrollHeight;
+  const step = 80;
+  for (let i = 1; i * step < ms; i++) {
+    await sleep(step);
+    inner.textContent = prefix + frames[i % frames.length];
+  }
+  inner.textContent = prefix + 'OK';
+}
+
+async function boot() {
+  input.disabled = true;
+
+  const print = (text) => { appendLine(text); output.scrollTop = output.scrollHeight; };
+
+  print('\nSystem Bootstrap, Version 1.0');
+  await sleep(80);
+  print('Copyright (c) Jakob Jonasson\n');
+  await sleep(100);
+
+  await spinLine('Initializing memory... ', 500);
+  await sleep(120);
+
+  print('Loading jakobos-portfolio.bin .............................');
+  await sleep(350);
+
+  print(
+    '##############################################################\n\n' +
+    '              JakobOS Portfolio System\n' +
+    '              Version 1.0.0\n\n' +
+    '              Copyright (c) Jakob Jonasson\n' +
+    '              All rights reserved.\n\n' +
+    '##############################################################'
+  );
+  await sleep(200);
+
+  print('\nPortfolio ready.\n');
+
+  input.disabled = false;
+  input.focus();
+}
+
+function runCommand(cmd) {
+  cmd = cmd.trim();
+  appendPromptLine(cmd);
+  handleCommand(cmd);
+  input.value = '';
+  output.scrollTop = output.scrollHeight;
+}
+
+input.addEventListener('keydown', (e) => {
+  if (e.key === 'Enter') {
+    const cmd = input.value;
+    if (cmd.trim() !== '') history.unshift(cmd);
+    historyIndex = -1;
+    runCommand(cmd);
+    tabMatches = [];
+    tabIndex = -1;
+  } else if (e.key === 'ArrowUp') {
+    e.preventDefault();
+    if (historyIndex < history.length - 1) { historyIndex++; input.value = history[historyIndex]; }
+  } else if (e.key === 'ArrowDown') {
+    e.preventDefault();
+    if (historyIndex > 0) { historyIndex--; input.value = history[historyIndex]; }
+    else { historyIndex = -1; input.value = ''; }
+  } else if (e.key === 'Tab') {
+    e.preventDefault();
+    const val = input.value.toLowerCase().trim();
+    const completions = getCompletions();
+    if (tabMatches.length === 0 || val !== tabOriginal) {
+      tabOriginal = val;
+      tabMatches = completions.filter(c => c.startsWith(val));
+      tabIndex = 0;
+    } else {
+      tabIndex = (tabIndex + 1) % tabMatches.length;
+    }
+    if (tabMatches.length > 0) input.value = tabMatches[tabIndex];
+  } else {
+    tabMatches = [];
+    tabIndex = -1;
+  }
+});
+
+document.addEventListener('click', () => { input.focus(); });
+
+boot();
+updatePrompt();
+</script>
+
+</body>
+</html>
