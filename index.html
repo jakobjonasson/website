@@ -7,9 +7,9 @@
 <link rel="icon" href="/favicon.ico" sizes="any">
 <link rel="apple-touch-icon" href="/apple-touch-icon.png">
 <title>Jakob Jonasson — Network Engineer</title>
-<meta name="description" content="Network engineer specializing in Cisco enterprise infrastructure, CJIS compliance, and security architecture. CCNA, Security+, AWS Solutions Architect certified.">
+<meta name="description" content="Network engineer delivering multi-site enterprise Cisco environments — WAN integration, routing and switching, wireless, and network security. CCNA certified, CCNP Enterprise in progress.">
 <meta property="og:title" content="Jakob Jonasson — Network Engineer">
-<meta property="og:description" content="Enterprise network infrastructure, Cisco environments, CJIS compliance, and security architecture.">
+<meta property="og:description" content="Multi-site enterprise Cisco environments, WAN integration, CJIS compliance, and network security.">
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://www.jjonasson.dev">
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -371,10 +371,11 @@
     <h2 class="gui-name">Jakob Jonasson</h2>
     <p class="gui-role">Network Engineer &middot; Grand Forks, ND</p>
     <p class="gui-bio">
-      Network engineer who designs, deploys, and validates enterprise Cisco networks for multi-site organizations. Experience covers routing and switching architecture, VLAN segmentation, VPN/IPsec, OSPF, HSRP, 802.1X, wireless (9800 WLC), next-generation firewalls, and network security.
+      Network engineer with production experience delivering multi-site enterprise Cisco environments. Lead engineer on a client's acquisition of eight poultry production facilities from one of the largest privately held companies in the U.S., separating each site from the parent network and integrating it into the client's WAN. CCNA certified, CCNP Enterprise in progress.
     </p>
     <div class="gui-certs">
       <span class="gui-cert">CCNA</span>
+      <span class="gui-cert">CCNP Enterprise (In Progress)</span>
       <span class="gui-cert">CompTIA Security+</span>
       <span class="gui-cert">ITIL 4 Foundation</span>
       <span class="gui-cert">AWS Solutions Architect Associate</span>
@@ -390,14 +391,15 @@
       <p class="exp-co">Twotrees Technologies — Grand Forks, ND</p>
       <p class="exp-dates">Oct 2024 – Present</p>
       <ul class="exp-list">
-        <li>Led the network rebuild for a client's acquisition of two vertically integrated poultry operations — breeder, hatchery, feed-mill, and processing facilities, 140+ switches. Reverse-engineered the undocumented edge, wireless, and OT security design on site, then rebuilt the first property (3 facilities, 40 switches) with one other engineer over a single Friday-to-Monday cutover: Catalyst 9500 SVL cores, 9800 WLC in HA SSO, HSRP-redundant OT network, and 12-subnet segmentation behind new next-generation firewalls</li>
-        <li>Pre-staged configs and documentation for the second location, then cut over 4 larger sites, 100+ switches, and 30+ subnets in the same four-day window</li>
-        <li>Led CJIS compliance initiatives for county jail and 911 center clients, including VLAN segmentation, wireless security, 802.1X NAC, and network-wide redundancy</li>
-        <li>Implemented Duo MFA for Cisco AnyConnect VPN and SonicWall SSLVPN using SAML SSO with Entra ID integration</li>
-        <li>Led emergency response to multiple SonicWall zero-day disclosures, coordinating mitigation and firmware remediation across 150+ firewalls</li>
+        <li>Sole escalation engineer for a top four U.S. turkey processor supporting their internal IT team for all level 3 escalations and network work as the client grew from 10 to 18 sites across six states in three months, nearly doubling their footprint</li>
+        <li>Planned and led network migrations across eight facilities the same client acquired from Cargill, sole lead engineer on the first three sites, then lead of a two-engineer team on a four-site cutover roughly three times its size, completed in a single Friday–Monday window during four days of facility downtime</li>
+        <li>Replaced legacy SD-WAN with next-generation firewalls and established site-to-site IPsec tunnels integrating each acquired facility into the client's multi-site WAN</li>
+        <li>Operate and extend a 400+ device Cisco campus environment across Catalyst 9500 StackWise Virtual cores, mixed-generation Catalyst access switching, HSRP-redundant distribution carrying OT networks, and 9800 WLC pairs in HA SSO with guest anchor</li>
+        <li>Design and support wireless across Cisco 9800 and Ruckus platforms for plant-floor, warehouse, and office environments</li>
+        <li>Manage SonicWall, Cisco, and Meraki edge across a 200+ firewall fleet, including coordinated zero-day mitigation and Duo MFA with Entra ID SAML SSO for AnyConnect and SonicWall SSLVPN remote access</li>
+        <li>Led CJIS compliance initiatives for county jail and 911 center clients. Met directly with stakeholders to assess gaps, scoped remediation, and implemented solutions end to end</li>
+        <li>Scope and design network refreshes across the firm's client base, assessing current-state environments and producing sized equipment recommendations and bills of materials across Cisco Catalyst, Ruckus, SonicWall, Aruba, and Meraki</li>
         <li>Deployed PRTG network monitoring, created monitors, automated alerts, and built a status dashboard integrated with internal digital signage</li>
-        <li>Managed DNS, DHCP, and IP addressing across multi-site client environments, including scope design, addressing schemes, and reservation/lease troubleshooting</li>
-        <li>Administered Meraki cloud-managed networks across multiple client sites</li>
       </ul>
     </div>
     <div class="exp-item">
@@ -405,9 +407,9 @@
       <p class="exp-co">Core Scientific — Grand Forks, ND</p>
       <p class="exp-dates">Dec 2023 – Oct 2024</p>
       <ul class="exp-list">
-        <li>Installed, cabled, and maintained servers and networking equipment in a large-scale data center; performed hardware audits, inventory management, and break/fix diagnostics</li>
+        <li>Installed, cabled, and maintained servers and networking equipment in a large-scale data center</li>
         <li>Led a team of 8 technicians to deploy 7,000+ servers across 4 weeks, finishing the weekly quota days ahead of schedule every week</li>
-        <li>Developed a Python automation tool to identify servers failing to populate in asset tracking systems</li>
+        <li>Wrote a multi-threaded Python script that scanned 1,000 IPs at a time to find servers missing from asset tracking</li>
       </ul>
     </div>
   </section>
@@ -429,15 +431,11 @@
     <div class="skills-grid">
       <div class="skill-box">
         <p class="skill-cat">Networking</p>
-        <p class="skill-list">Cisco IOS-XE, OSPF, HSRP, 802.1X/RADIUS, VLAN Segmentation, VPN/IPsec, SD-WAN, LAN/WAN, Meraki, Aruba</p>
+        <p class="skill-list">Cisco IOS-XE, OSPF, FHRP, 802.1X/RADIUS, VLAN Segmentation, VPN/IPsec, SD-WAN, LAN/WAN, Meraki, Aruba</p>
       </div>
       <div class="skill-box">
         <p class="skill-cat">Security</p>
-        <p class="skill-list">SonicWall, Datto EDR, Duo MFA/SAML SSO, NAC (802.1X/EAP-TLS), incident response, vulnerability and firmware lifecycle management</p>
-      </div>
-      <div class="skill-box">
-        <p class="skill-cat">Systems</p>
-        <p class="skill-list">Windows Server 2012–2025, Active Directory, Hyper-V, Linux (Ubuntu), PRTG, Veeam</p>
+        <p class="skill-list">SonicWall, Datto EDR/AV, Duo MFA/SAML SSO, NAC, incident response, vulnerability and firmware lifecycle management</p>
       </div>
       <div class="skill-box">
         <p class="skill-cat">Automation &amp; Cloud</p>
@@ -449,15 +447,15 @@
   <section class="gui-section" id="projects">
     <p class="sec-title">Projects</p>
     <div class="proj">
-      <p class="proj-title">Multi-Site Network Takeover &amp; Infrastructure Deployment</p>
-      <p class="proj-meta">Poultry Processing Client · 2026</p>
-      <p class="proj-desc">Led the network rebuild for a client's acquisition of two vertically integrated poultry operations — breeder, hatchery, feed-mill, and processing facilities, 140+ switches. Reverse-engineered the undocumented edge, wireless, and OT security design on site, then rebuilt the first property (3 facilities, 40 switches) with one other engineer over a single Friday-to-Monday cutover: Catalyst 9500 SVL cores, 9800 WLC in HA SSO, HSRP-redundant OT network, and 12-subnet segmentation behind new next-generation firewalls. Pre-staged configs and documentation for the second location, then cut over 4 larger sites, 100+ switches, and 30+ subnets in the same four-day window.</p>
+      <p class="proj-title">Eight-Site Acquisition Separation &amp; WAN Integration</p>
+      <p class="proj-meta">Poultry Processing Client · 2025–2026</p>
+      <p class="proj-desc">Lead engineer on a client's acquisition of eight poultry production facilities — breeder, hatchery, feed-mill, and processing sites — from one of the largest privately held companies in the U.S. Separated each site from the parent network and integrated it into the client's WAN: legacy SD-WAN replaced with next-generation firewalls and site-to-site IPsec tunnels, Catalyst 9500 StackWise Virtual cores, HSRP-redundant distribution carrying OT networks, and 9800 WLC pairs in HA SSO. Sole lead engineer on the first three sites, then lead of a two-engineer team on a four-site cutover roughly three times its size, completed in a single Friday–Monday window during four days of facility downtime.</p>
       <div class="proj-tags">
-        <span class="proj-tag">Cisco 9500/9300</span>
+        <span class="proj-tag">Cisco 9500 SVL</span>
         <span class="proj-tag">9800 WLC HA SSO</span>
         <span class="proj-tag">HSRP</span>
-        <span class="proj-tag">OT Network</span>
-        <span class="proj-tag">140+ Switches</span>
+        <span class="proj-tag">IPsec WAN</span>
+        <span class="proj-tag">8 Facilities</span>
       </div>
     </div>
     <div class="proj">
@@ -737,61 +735,70 @@ function showAbout() {
     ' \\___/ \\__,_|_|\\_\\___/|_.__/ \n\n' +
     'Jakob Jonasson\n' +
     '────────────────────────────────\n\n' +
-    'Network engineer who designs, deploys, and validates enterprise Cisco networks\n' +
-    'for multi-site organizations. Experience covers routing and switching architecture,\n' +
-    'VLAN segmentation, VPN/IPsec, OSPF, HSRP, 802.1X, wireless (9800 WLC), next-\n' +
-    'generation firewalls, and network security.\n\n' +
-    'Certifications: CCNA, CompTIA Security+, ITIL 4 Foundation, AWS Solutions Architect\n' +
-    'Associate, AWS CloudOps Engineer Associate, Ruckus Certified WiFi Associate.\n';
+    'Network engineer with production experience delivering multi-site enterprise\n' +
+    'Cisco environments. Lead engineer on a client\'s acquisition of eight poultry\n' +
+    'production facilities from one of the largest privately held companies in the\n' +
+    'U.S., separating each site from the parent network and integrating it into the\n' +
+    'client\'s WAN.\n' +
+    '\n' +
+    'Certifications: CCNA, CCNP Enterprise (in progress), CompTIA Security+, ITIL 4\n' +
+    'Foundation, AWS Solutions Architect Associate, AWS CloudOps Engineer\n' +
+    'Associate, Ruckus Certified WiFi Associate.\n';
 }
 
 function showResume() {
-  return '! --- Experience ---\n\n' +
+  return '! --- Experience ---\n' +
+    '\n' +
     'interface C0/0\n' +
     ' description Network Engineer at Twotrees Technologies – Grand Forks, ND\n' +
     ' ! Oct 2024 - Present\n' +
     ' !\n' +
-    ' ! Led the network rebuild for a client\'s acquisition of two vertically\n' +
-    ' !   integrated poultry operations — breeder, hatchery, feed-mill, and\n' +
-    ' !   processing facilities, 140+ switches. Reverse-engineered the\n' +
-    ' !   undocumented edge, wireless, and OT security design on site, then\n' +
-    ' !   rebuilt the first property (3 facilities, 40 switches) with one other\n' +
-    ' !   engineer over a single Friday-to-Monday cutover: Catalyst 9500 SVL\n' +
-    ' !   cores, 9800 WLC in HA SSO, HSRP-redundant OT network, and 12-subnet\n' +
-    ' !   segmentation behind new next-generation firewalls.\n' +
-    ' ! Pre-staged configs and documentation for the second location, then cut\n' +
-    ' !   over 4 larger sites, 100+ switches, and 30+ subnets in the same\n' +
-    ' !   four-day window.\n' +
-    ' ! Led CJIS compliance initiatives for county jail and 911 center clients,\n' +
-    ' !   including VLAN segmentation, wireless security, 802.1X NAC, and\n' +
-    ' !   network-wide redundancy.\n' +
-    ' ! Implemented Duo MFA for Cisco AnyConnect VPN and SonicWall SSLVPN using\n' +
-    ' !   SAML SSO with Entra ID integration.\n' +
-    ' ! Led emergency response to multiple SonicWall zero-day disclosures,\n' +
-    ' !   coordinating mitigation and firmware remediation across 150+\n' +
-    ' !   firewalls.\n' +
-    ' ! Deployed PRTG network monitoring, created monitors, automated alerts,\n' +
-    ' !   and built a status dashboard integrated with internal digital\n' +
-    ' !   signage.\n' +
-    ' ! Managed DNS, DHCP, and IP addressing across multi-site client\n' +
-    ' !   environments, including scope design, addressing schemes, and\n' +
-    ' !   reservation/lease troubleshooting.\n' +
-    ' ! Administered Meraki cloud-managed networks across multiple client\n' +
-    ' !   sites.\n' +
-    ' no shutdown\n\n' +
+    ' ! Sole escalation engineer for a top four U.S. turkey processor supporting\n' +
+    ' !   their internal IT team for all level 3 escalations and network work as the\n' +
+    ' !   client grew from 10 to 18 sites across six states in three months, nearly\n' +
+    ' !   doubling their footprint.\n' +
+    ' ! Planned and led network migrations across eight facilities the same client\n' +
+    ' !   acquired from Cargill, sole lead engineer on the first three sites, then\n' +
+    ' !   lead of a two-engineer team on a four-site cutover roughly three times its\n' +
+    ' !   size, completed in a single Friday–Monday window during four days of\n' +
+    ' !   facility downtime.\n' +
+    ' ! Replaced legacy SD-WAN with next-generation firewalls and established\n' +
+    ' !   site-to-site IPsec tunnels integrating each acquired facility into the\n' +
+    ' !   client\'s multi-site WAN.\n' +
+    ' ! Operate and extend a 400+ device Cisco campus environment across Catalyst\n' +
+    ' !   9500 StackWise Virtual cores, mixed-generation Catalyst access switching,\n' +
+    ' !   HSRP-redundant distribution carrying OT networks, and 9800 WLC pairs in HA\n' +
+    ' !   SSO with guest anchor.\n' +
+    ' ! Design and support wireless across Cisco 9800 and Ruckus platforms for\n' +
+    ' !   plant-floor, warehouse, and office environments.\n' +
+    ' ! Manage SonicWall, Cisco, and Meraki edge across a 200+ firewall fleet,\n' +
+    ' !   including coordinated zero-day mitigation and Duo MFA with Entra ID SAML\n' +
+    ' !   SSO for AnyConnect and SonicWall SSLVPN remote access.\n' +
+    ' ! Led CJIS compliance initiatives for county jail and 911 center clients.\n' +
+    ' !   Met directly with stakeholders to assess gaps, scoped remediation, and\n' +
+    ' !   implemented solutions end to end.\n' +
+    ' ! Scope and design network refreshes across the firm\'s client base,\n' +
+    ' !   assessing current-state environments and producing sized equipment\n' +
+    ' !   recommendations and bills of materials across Cisco Catalyst, Ruckus,\n' +
+    ' !   SonicWall, Aruba, and Meraki.\n' +
+    ' ! Deployed PRTG network monitoring, created monitors, automated alerts, and\n' +
+    ' !   built a status dashboard integrated with internal digital signage.\n' +
+    ' no shutdown\n' +
+    '\n' +
     'interface C0/1\n' +
     ' description Data Center Technician at Core Scientific – Grand Forks, ND\n' +
     ' ! Dec 2023 - Oct 2024\n' +
     ' !\n' +
     ' ! Installed, cabled, and maintained servers and networking equipment in a\n' +
-    ' !   large-scale data center; performed hardware audits, inventory\n' +
-    ' !   management, and break/fix diagnostics.\n' +
+    ' !   large-scale data center.\n' +
     ' ! Led a team of 8 technicians to deploy 7,000+ servers across 4 weeks,\n' +
     ' !   finishing the weekly quota days ahead of schedule every week.\n' +
-    ' ! Developed a Python automation tool to identify servers failing to\n' +
-    ' !   populate in asset tracking systems.\n' +
-    ' shutdown\n\n' +
-    '! --- Education ---\n\n' +
+    ' ! Wrote a multi-threaded Python script that scanned 1,000 IPs at a time to\n' +
+    ' !   find servers missing from asset tracking.\n' +
+    ' shutdown\n' +
+    '\n' +
+    '! --- Education ---\n' +
+    '\n' +
     'interface C0/2\n' +
     ' description Bachelor of Science, Cloud and Network Engineering, Western Governors University\n' +
     ' ! July 2026\n' +
@@ -802,35 +809,34 @@ function showResume() {
 }
 
 function showSkills() {
-  return '! --- Technical Skills ---\n\n' +
-    'access-list 100 permit   Networking     Cisco IOS-XE, OSPF, HSRP, 802.1X/RADIUS,\n' +
+  return '! --- Technical Skills ---\n' +
+    '\n' +
+    'access-list 100 permit   Networking     Cisco IOS-XE, OSPF, FHRP, 802.1X/RADIUS,\n' +
     '                                        VLAN Segmentation, VPN/IPsec, SD-WAN,\n' +
     '                                        LAN/WAN, Meraki, Aruba\n' +
-    'access-list 200 permit   Security       SonicWall, Datto EDR, Duo MFA/SAML SSO,\n' +
-    '                                        NAC (802.1X/EAP-TLS), incident response,\n' +
+    'access-list 200 permit   Security       SonicWall, Datto EDR/AV, Duo MFA/SAML\n' +
+    '                                        SSO, NAC, incident response,\n' +
     '                                        vulnerability and firmware lifecycle\n' +
     '                                        management\n' +
-    'access-list 300 permit   Systems        Windows Server 2012–2025, Active Directory,\n' +
-    '                                        Hyper-V, Linux (Ubuntu), PRTG, Veeam\n' +
-    'access-list 400 permit   Automation     Python, AWS (VPC, Security Groups, IAM,\n' +
+    'access-list 300 permit   Automation     Python, AWS (VPC, Security Groups, IAM,\n' +
     '                                        Lambda), Git';
 }
 
 function showProjects() {
   return '! --- Project Portfolio ---\n\n' +
     'interface Project0/0\n' +
-    ' description Multi-Site Network Takeover & Infrastructure Deployment (Poultry Processing Client, 2026)\n' +
-    ' ! Led the network rebuild for a client\'s acquisition of two vertically\n' +
-    ' !   integrated poultry operations — breeder, hatchery, feed-mill, and\n' +
-    ' !   processing facilities, 140+ switches. Reverse-engineered the\n' +
-    ' !   undocumented edge, wireless, and OT security design on site, then\n' +
-    ' !   rebuilt the first property (3 facilities, 40 switches) with one other\n' +
-    ' !   engineer over a single Friday-to-Monday cutover: Catalyst 9500 SVL\n' +
-    ' !   cores, 9800 WLC in HA SSO, HSRP-redundant OT network, and 12-subnet\n' +
-    ' !   segmentation behind new next-generation firewalls. Pre-staged configs\n' +
-    ' !   and documentation for the second location, then cut over 4 larger\n' +
-    ' !   sites, 100+ switches, and 30+ subnets in the same four-day window.\n' +
-    ' ! Tags: Cisco 9500/9300, 9800 WLC HA SSO, HSRP, OT Network, 140+ Switches\n' +
+    ' description Eight-Site Acquisition Separation & WAN Integration (Poultry Processing Client, 2025-2026)\n' +
+    ' ! Lead engineer on a client\'s acquisition of eight poultry production\n' +
+    ' !   facilities — breeder, hatchery, feed-mill, and processing sites — from one\n' +
+    ' !   of the largest privately held companies in the U.S. Separated each site\n' +
+    ' !   from the parent network and integrated it into the client\'s WAN: legacy\n' +
+    ' !   SD-WAN replaced with next-generation firewalls and site-to-site IPsec\n' +
+    ' !   tunnels, Catalyst 9500 StackWise Virtual cores, HSRP-redundant\n' +
+    ' !   distribution carrying OT networks, and 9800 WLC pairs in HA SSO. Sole lead\n' +
+    ' !   engineer on the first three sites, then lead of a two-engineer team on a\n' +
+    ' !   four-site cutover roughly three times its size, completed in a single\n' +
+    ' !   Friday–Monday window during four days of facility downtime.\n' +
+    ' ! Tags: Cisco 9500 SVL, 9800 WLC HA SSO, HSRP, IPsec WAN, 8 Facilities\n' +
     ' no shutdown\n\n' +
     'interface Project0/1\n' +
     ' description CJIS Compliance Infrastructure (Law Enforcement Client, 2026)\n' +
