@@ -29,3 +29,10 @@
 
 /
   Cache-Control: public, max-age=0, must-revalidate
+
+# The resume gets replaced in place, keeping the same URL. Pages' default of
+# max-age=14400 means anyone who opened the old one keeps getting it from their
+# own browser cache for four hours. Revalidate every time instead - it is one
+# conditional request, and a stale resume is worse than a 304.
+/resume.pdf
+  Cache-Control: public, max-age=0, must-revalidate

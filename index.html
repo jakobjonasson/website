@@ -985,9 +985,14 @@ function showRunCfg() {
     '!\nversion 1.0.5\n!\nhostname ' + HOSTNAME + '\n!\n' + body + '\n!\nend';
 }
 
-// Byte count is flavor text taken from the current resume.pdf; if the file is
-// replaced with a very different one it is worth refreshing.
-const RESUME_BYTES = 652553;
+// Byte count for the copy output. Seeded with the current size so there is
+// always something to print, then corrected from the real file so it cannot go
+// stale the next time resume.pdf is replaced.
+let resumeBytes = 650126;
+
+fetch('/resume.pdf', { method: 'HEAD' })
+  .then(r => { const n = Number(r.headers.get('content-length')); if (n) resumeBytes = n; })
+  .catch(() => {});
 
 function copyResume() {
   const a = document.createElement('a');
@@ -996,7 +1001,7 @@ function copyResume() {
   document.body.appendChild(a);
   a.click();
   a.remove();
-  const n = RESUME_BYTES.toLocaleString('en-US');
+  const n = resumeBytes.toLocaleString('en-US');
   return 'Destination filename [resume.pdf]?\n' +
     'Accessing flash:resume.pdf...\n' +
     '!'.repeat(isNarrow() ? 30 : 50) + '\n' +
