@@ -696,7 +696,7 @@ const BANNER_NARROW =
 // A click, tap or keypress fast-forwards the boot. Every line still prints in
 // order; the sequence just stops waiting between them, so the finished
 // transcript is identical to one that ran at full length.
-let bootSkip = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+let bootSkip = false;
 const bootSkipped = () => bootSkip;
 const bootSleep = ms => (bootSkip ? Promise.resolve() : sleep(ms));
 
