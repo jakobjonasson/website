@@ -8,12 +8,58 @@
 <link rel="apple-touch-icon" href="/apple-touch-icon.png">
 <title>Jakob Jonasson — Network Engineer</title>
 <meta name="description" content="Network engineer delivering multi-site enterprise Cisco environments — WAN integration, routing and switching, wireless, and network security. CCNA certified, CCNP Enterprise in progress.">
+<link rel="canonical" href="https://www.jjonasson.dev/">
+<meta name="theme-color" content="#000000">
 <meta property="og:title" content="Jakob Jonasson — Network Engineer">
 <meta property="og:description" content="Multi-site enterprise Cisco environments, WAN integration, CJIS compliance, and network security.">
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://www.jjonasson.dev">
+<meta property="og:site_name" content="jjonasson.dev">
+<meta property="og:image" content="https://www.jjonasson.dev/og.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="Jakob Jonasson — Network Engineer, Grand Forks, ND">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Jakob Jonasson — Network Engineer">
+<meta name="twitter:description" content="Multi-site enterprise Cisco environments, WAN integration, CJIS compliance, and network security.">
+<meta name="twitter:image" content="https://www.jjonasson.dev/og.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Person",
+  "name": "Jakob Jonasson",
+  "url": "https://www.jjonasson.dev",
+  "jobTitle": "Network Engineer",
+  "email": "mailto:jakob@jonasson.us",
+  "telephone": "+1-701-610-1058",
+  "address": {
+    "@type": "PostalAddress",
+    "addressLocality": "Grand Forks",
+    "addressRegion": "ND",
+    "addressCountry": "US"
+  },
+  "sameAs": [
+    "https://github.com/jakobjonasson",
+    "https://www.linkedin.com/in/jakob-jonasson/"
+  ],
+  "knowsAbout": [
+    "Enterprise networking", "Cisco IOS-XE", "Routing and switching",
+    "OSPF", "BGP", "Wireless networking", "Network security", "WAN integration"
+  ],
+  "hasCredential": [
+    { "@type": "EducationalOccupationalCredential", "name": "Cisco Certified Network Associate (CCNA)" },
+    { "@type": "EducationalOccupationalCredential", "name": "Cisco Certified Specialist - Enterprise Core" },
+    { "@type": "EducationalOccupationalCredential", "name": "CompTIA Security+" },
+    { "@type": "EducationalOccupationalCredential", "name": "ITIL 4 Foundation" },
+    { "@type": "EducationalOccupationalCredential", "name": "AWS Certified Solutions Architect - Associate" },
+    { "@type": "EducationalOccupationalCredential", "name": "AWS Certified CloudOps Engineer - Associate" },
+    { "@type": "EducationalOccupationalCredential", "name": "Ruckus Certified WiFi Associate" }
+  ]
+}
+</script>
 <style>
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
@@ -33,6 +79,8 @@
     font-family: 'JetBrains Mono', monospace;
     font-size: 14px;
     line-height: 1.5;
+    /* Stop iOS inflating text in landscape - it breaks the ASCII column math */
+    -webkit-text-size-adjust: 100%;
   }
 
   /* ── Shared terminal chrome ── */
@@ -42,6 +90,7 @@
     flex-direction: column;
     width: 100%;
     height: 100vh;
+    height: 100dvh; /* mobile: exclude the collapsing URL bar */
     overflow: hidden;
   }
 
@@ -125,6 +174,7 @@
   .gui-view {
     display: none;
     min-height: 100vh;
+    min-height: 100dvh;
     background: var(--bg);
   }
 
@@ -315,6 +365,7 @@
   .cli-view {
     display: none;
     height: 100vh;
+    height: 100dvh;
     overflow: hidden;
   }
 
@@ -326,13 +377,25 @@
   /* ── Responsive ── */
 
   @media (max-width: 600px) {
-    html { font-size: 13px; }
+    html, body { font-size: 13px; }
     .gui-section { padding-left: 16px; padding-right: 16px; }
     .gui-topbar { padding: 8px 16px; }
     .gui-topbar-links { gap: 12px; }
     .skills-grid { grid-template-columns: 1fr; }
     .term-body { padding: 10px; }
     .term-input-row { padding: 0 10px 10px; }
+    .term-topbar { padding: 6px 10px; font-size: 11px; }
+    .gui-name { font-size: 24px; }
+    /* Stack the label so unbreakable URLs get the full column width */
+    .contact-label { display: block; width: auto; margin-bottom: 2px; }
+    .contact-row { margin-bottom: 14px; overflow-wrap: anywhere; }
+    /* Tappable mode links - no hover on touch, so give them real targets */
+    .mode-link { display: inline-block; padding: 5px 0; }
+  }
+
+  /* 36-column boot art needs ~8px per char; keep it fitting on a 320px screen */
+  @media (max-width: 360px) {
+    html, body { font-size: 12px; }
   }
 </style>
 </head>
@@ -354,6 +417,16 @@
   <div class="term-body" id="boot-output"></div>
 </div>
 
+<!-- The boot sequence is drawn by JS, so without it the landing page is blank.
+     The portfolio markup below is static, so just reveal it. -->
+<noscript>
+  <style>
+    #landing { display: none; }
+    #gui-view { display: block; }
+    .gui-topbar-links #gui-back { display: none; }
+  </style>
+</noscript>
+
 <!-- ═══════════════════════════════════ -->
 <!-- GUI VIEW                           -->
 <!-- ═══════════════════════════════════ -->
@@ -362,19 +435,22 @@
   <nav class="gui-topbar">
     <span class="gui-topbar-name">Jakob Jonasson</span>
     <div class="gui-topbar-links">
+      <a href="/resume.pdf" target="_blank" rel="noopener">resume</a>
       <a href="#" id="gui-back">&lt;- back</a>
     </div>
   </nav>
 
+  <main>
   <section class="gui-section" id="about" style="padding-top:5rem;">
-    <p class="sec-title">About</p>
-    <h2 class="gui-name">Jakob Jonasson</h2>
+    <h2 class="sec-title">About</h2>
+    <h1 class="gui-name">Jakob Jonasson</h1>
     <p class="gui-role">Network Engineer &middot; Grand Forks, ND</p>
     <p class="gui-bio">
       Network engineer with production experience delivering multi-site enterprise Cisco environments. Lead engineer on a client's acquisition of eight poultry production facilities from one of the largest privately held companies in the U.S., separating each site from the parent network and integrating it into the client's WAN. CCNA certified, CCNP Enterprise in progress.
     </p>
     <div class="gui-certs">
       <span class="gui-cert">CCNA</span>
+      <span class="gui-cert">Cisco Certified Specialist - Enterprise Core</span>
       <span class="gui-cert">CCNP Enterprise (In Progress)</span>
       <span class="gui-cert">CompTIA Security+</span>
       <span class="gui-cert">ITIL 4 Foundation</span>
@@ -385,7 +461,7 @@
   </section>
 
   <section class="gui-section" id="experience">
-    <p class="sec-title">Experience</p>
+    <h2 class="sec-title">Experience</h2>
     <div class="exp-item current">
       <p class="exp-role">Network Engineer</p>
       <p class="exp-co">Twotrees Technologies — Grand Forks, ND</p>
@@ -415,7 +491,7 @@
   </section>
 
   <section class="gui-section" id="education">
-    <p class="sec-title">Education</p>
+    <h2 class="sec-title">Education</h2>
     <div class="exp-item">
       <p class="exp-role">Bachelor of Science, Cloud and Network Engineering</p>
       <p class="exp-co">Western Governors University</p>
@@ -427,7 +503,7 @@
   </section>
 
   <section class="gui-section" id="skills">
-    <p class="sec-title">Technical Skills</p>
+    <h2 class="sec-title">Technical Skills</h2>
     <div class="skills-grid">
       <div class="skill-box">
         <p class="skill-cat">Networking</p>
@@ -445,7 +521,7 @@
   </section>
 
   <section class="gui-section" id="projects">
-    <p class="sec-title">Projects</p>
+    <h2 class="sec-title">Projects</h2>
     <div class="proj">
       <p class="proj-title">Eight-Site Acquisition Separation &amp; WAN Integration</p>
       <p class="proj-meta">Poultry Processing Client · 2025–2026</p>
@@ -482,12 +558,14 @@
   </section>
 
   <section class="gui-section" id="contact" style="padding-bottom:5rem;">
-    <p class="sec-title">Contact</p>
+    <h2 class="sec-title">Contact</h2>
     <a href="tel:+17016101058" class="contact-row"><span class="contact-label">Phone</span>701-610-1058</a>
     <a href="mailto:jakob@jonasson.us" class="contact-row"><span class="contact-label">Email</span>jakob@jonasson.us</a>
     <a href="https://github.com/jakobjonasson" target="_blank" rel="noopener" class="contact-row"><span class="contact-label">GitHub</span>github.com/jakobjonasson</a>
     <a href="https://www.linkedin.com/in/jakob-jonasson/" target="_blank" rel="noopener" class="contact-row"><span class="contact-label">LinkedIn</span>linkedin.com/in/jakob-jonasson</a>
+    <a href="/resume.pdf" target="_blank" rel="noopener" class="contact-row"><span class="contact-label">Resume</span>resume.pdf</a>
   </section>
+  </main>
 </div>
 
 <!-- ═══════════════════════════════════ -->
@@ -527,7 +605,7 @@ function escapeHtml(s) {
   return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
 }
 
-async function spinLine(prefix, ms, parent) {
+async function spinLine(prefix, ms, parent, skip) {
   const frames = ['/','-','\\','|'];
   const d = document.createElement('div');
   d.className = 'output-block';
@@ -539,14 +617,15 @@ async function spinLine(prefix, ms, parent) {
   parent.scrollTop = parent.scrollHeight;
   const step = 80;
   for (let i = 1; i * step < ms; i++) {
+    if (skip && skip()) break;
     await sleep(step);
     inner.textContent = prefix + frames[i % frames.length];
   }
   inner.textContent = prefix + 'OK';
 }
 
-async function progressBar(ms, parent) {
-  const w = 55;
+async function progressBar(ms, parent, width, skip) {
+  const w = width || 55;
   const d = document.createElement('div');
   d.className = 'output-block';
   const inner = document.createElement('div');
@@ -554,11 +633,81 @@ async function progressBar(ms, parent) {
   d.appendChild(inner);
   parent.appendChild(d);
   for (let i = 0; i <= w; i++) {
+    if (skip && skip()) i = w; // jump straight to a full bar
     const pct = Math.round((i/w)*100).toString().padStart(3,' ');
     inner.textContent = '[' + '#'.repeat(i) + ' '.repeat(w-i) + '] ' + pct + '%';
     parent.scrollTop = parent.scrollHeight;
     if (i < w) await sleep(ms / w);
   }
+}
+
+// ════════════════════════════════════
+// Narrow-viewport boot art
+// ════════════════════════════════════
+
+// Width-based rather than user-agent based: this also covers a narrow desktop
+// window, and it does not rot as UA strings change.
+const NARROW_MQ = window.matchMedia('(max-width: 600px)');
+const isNarrow = () => NARROW_MQ.matches;
+
+// The wide banner is 62 columns; the narrow one is 36, which fits a 320px
+// screen at the mobile font size. Keep both centered to their own rule width.
+const RULE_WIDE = '#'.repeat(62);
+const RULE_NARROW = '#'.repeat(36);
+
+const BANNER_WIDE =
+  RULE_WIDE + '\n\n' +
+  '        Jonasson Software - Portfolio Repository System\n' +
+  '                         Version 1.0.5\n\n' +
+  '                 Copyright (c) Jakob Jonasson\n' +
+  '                     All rights reserved.\n\n' +
+  RULE_WIDE;
+
+const BANNER_NARROW =
+  RULE_NARROW + '\n\n' +
+  '   Jonasson Software - Portfolio\n' +
+  '         Repository System\n' +
+  '           Version 1.0.5\n\n' +
+  '    Copyright (c) Jakob Jonasson\n' +
+  '        All rights reserved.\n\n' +
+  RULE_NARROW;
+
+const bootBanner = () => isNarrow() ? BANNER_NARROW : BANNER_WIDE;
+const bootLoadingLine = () =>
+  'Loading jakobs-portfolio.bin ' + '.'.repeat(isNarrow() ? 6 : 29);
+const bootBarWidth = () => isNarrow() ? 28 : 55;
+
+// ── Boot skip ──
+// A click, tap or keypress fast-forwards the boot. Every line still prints in
+// order; the sequence just stops waiting between them, so the finished
+// transcript is identical to one that ran at full length.
+
+let bootSkip = false;
+const bootSkipped = () => bootSkip;
+const bootSleep = ms => bootSkip ? Promise.resolve() : sleep(ms);
+
+// Returns a disarm function; call it once the boot has finished so these
+// listeners do not swallow a click meant for the menu.
+function armBootSkip(el) {
+  // Visitors who asked their OS for reduced motion get the finished state.
+  if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+    bootSkip = true;
+    return () => {};
+  }
+  const trip = () => { bootSkip = true; disarm(); };
+  const onKey = e => {
+    if (e.metaKey || e.ctrlKey || e.altKey) return; // leave browser shortcuts alone
+    trip();
+  };
+  function disarm() {
+    el.removeEventListener('click', trip);
+    el.removeEventListener('touchstart', trip);
+    document.removeEventListener('keydown', onKey);
+  }
+  el.addEventListener('click', trip);
+  el.addEventListener('touchstart', trip, { passive: true });
+  document.addEventListener('keydown', onKey);
+  return disarm;
 }
 
 // ════════════════════════════════════
@@ -620,47 +769,55 @@ const bootOut = document.getElementById('boot-output');
 
 async function landingBoot() {
   const print = t => { mkBlock(t, bootOut); bootOut.scrollTop = bootOut.scrollHeight; };
+  const disarmSkip = armBootSkip(landingEl);
 
-  await sleep(200);
+  await bootSleep(200);
   print('\nSystem Bootstrap, Version 1.0');
-  await sleep(80);
+  await bootSleep(80);
   print('Copyright (c) Jakob Jonasson\n');
-  await sleep(100);
+  await bootSleep(100);
 
-  await spinLine('Initializing memory... ', 500, bootOut);
-  await sleep(120);
+  await spinLine('Initializing memory... ', 500, bootOut, bootSkipped);
+  await bootSleep(120);
 
-  print('Loading jakobos-portfolio.bin .............................');
-  await progressBar(750, bootOut);
-  await sleep(150);
+  print(bootLoadingLine());
+  await progressBar(750, bootOut, bootBarWidth(), bootSkipped);
+  await bootSleep(150);
 
-  print(
-    '##############################################################\n\n' +
-    '        Jonasson Software - Portfolio Repository System\n' +
-    '                         Version 1.0.5\n\n' +
-    '                 Copyright (c) Jakob Jonasson\n' +
-    '                     All rights reserved.\n\n' +
-    '##############################################################'
-  );
-  await sleep(200);
+  print(bootBanner());
+  await bootSleep(200);
 
   print('\nPortfolio ready.\n');
-  await sleep(100);
+  await bootSleep(100);
 
-  // Mode selection as terminal output
+  disarmSkip();
+
+  // Mode selection as terminal output. On a narrow screen the descriptions go
+  // on their own line instead of trailing the link, which would wrap mid-word.
   const sel = document.createElement('div');
   sel.className = 'output-block';
-  sel.innerHTML =
-    '<div class="response">' +
-    'Select interface:\n\n' +
-    '  <a class="mode-link" id="pick-gui">[1]  Portfolio</a>   <span class="dim">scrollable overview</span>\n' +
-    '  <a class="mode-link" id="pick-cli">[2]  Terminal</a>    <span class="dim">interactive CLI (try: sh run)</span>\n' +
-    '</div>';
+  // Real hrefs so the links are focusable, announced as links, and still work
+  // with JS off; the handlers preventDefault so pushState owns the history.
+  const GUI_LINK = '<a class="mode-link" id="pick-gui" href="#portfolio">[1]  Portfolio</a>';
+  const CLI_LINK = '<a class="mode-link" id="pick-cli" href="#terminal">[2]  Terminal</a>';
+  sel.innerHTML = isNarrow()
+    ? '<div class="response">' +
+      'Select interface:\n\n' +
+      '  ' + GUI_LINK + '\n' +
+      '       <span class="dim">scrollable overview</span>\n' +
+      '  ' + CLI_LINK + '\n' +
+      '       <span class="dim">interactive CLI (try: sh run)</span>\n' +
+      '</div>'
+    : '<div class="response">' +
+      'Select interface:\n\n' +
+      '  ' + GUI_LINK + '   <span class="dim">scrollable overview</span>\n' +
+      '  ' + CLI_LINK + '    <span class="dim">interactive CLI (try: sh run)</span>\n' +
+      '</div>';
   bootOut.appendChild(sel);
   bootOut.scrollTop = bootOut.scrollHeight;
 
-  document.getElementById('pick-gui').addEventListener('click', showGui);
-  document.getElementById('pick-cli').addEventListener('click', showCli);
+  document.getElementById('pick-gui').addEventListener('click', e => { e.preventDefault(); showGui(); });
+  document.getElementById('pick-cli').addEventListener('click', e => { e.preventDefault(); showCli(); });
 
   // Keyboard: press 1 or 2
   function onKey(e) {
@@ -720,7 +877,7 @@ function showVersion() {
     'ROM: System Bootstrap, Version 1.0\n' +
     'BOOTLDR: PRS Boot Loader, Version 1.0\n\n' +
     'System returned to ROM by power-on\n' +
-    'System image file is "flash:jakobos-portfolio.bin"\n\n' +
+    'System image file is "flash:jakobs-portfolio.bin"\n\n' +
     'Portfolio uptime is since ' + new Date().toUTCString() + '\n' +
     'System restarted by power-on\n\n' +
     'Configuration register is 0x2102';
@@ -741,9 +898,10 @@ function showAbout() {
     'U.S., separating each site from the parent network and integrating it into the\n' +
     'client\'s WAN.\n' +
     '\n' +
-    'Certifications: CCNA, CCNP Enterprise (in progress), CompTIA Security+, ITIL 4\n' +
-    'Foundation, AWS Solutions Architect Associate, AWS CloudOps Engineer\n' +
-    'Associate, Ruckus Certified WiFi Associate.\n';
+    'Certifications: CCNA, Cisco Certified Specialist - Enterprise Core, CCNP\n' +
+    'Enterprise (in progress), CompTIA Security+, ITIL 4 Foundation, AWS Solutions\n' +
+    'Architect Associate, AWS CloudOps Engineer Associate, Ruckus Certified WiFi\n' +
+    'Associate.\n';
 }
 
 function showResume() {
@@ -856,6 +1014,26 @@ function showProjects() {
     ' no shutdown';
 }
 
+// Byte count is flavor text taken from the current resume.pdf; if the file is
+// replaced with a very different one it is worth refreshing.
+const RESUME_BYTES = 652553;
+
+function copyResume() {
+  const a = document.createElement('a');
+  a.href = '/resume.pdf';
+  a.download = 'Jakob-Jonasson-Resume.pdf';
+  document.body.appendChild(a);
+  a.click();
+  a.remove();
+  const n = RESUME_BYTES.toLocaleString('en-US');
+  return 'Destination filename [resume.pdf]?\n' +
+    'Accessing flash:resume.pdf...\n' +
+    '!'.repeat(isNarrow() ? 30 : 50) + '\n' +
+    '[OK - ' + n + ' bytes]\n\n' +
+    n + ' bytes copied in 0.412 secs\n\n' +
+    'Or open it directly: <a href="/resume.pdf" target="_blank" rel="noopener" style="color:#fff">/resume.pdf</a>';
+}
+
 function showContact() {
   return '! --- Contact Information ---\n\n' +
     'ip route Phone        192.168.1.1 <a href="tel:+17016101058" style="color:#fff">701-610-1058</a>\n' +
@@ -885,6 +1063,7 @@ function showUserHelp() {
 }
 function showEnableHelp() {
   return '  show                Show running system information\n' +
+    '  copy                Copy flash:resume.pdf to the local disk\n' +
     '  disable             Return to user mode\n' +
     '  clear               Clear the terminal\n' +
     '  help                Description of the interactive help system';
@@ -934,6 +1113,7 @@ function handleCmd(raw) {
     if (c === 'show contact' || c === 'sh contact' || c === 'sh con') { cliPrint(showContact()); return; }
     if (c === 'show version' || c === 'sh ver') { cliPrint(showVersion()); return; }
     if (c === 'show running-config' || c === 'sh run') { cliPrint(showRunCfg()); return; }
+    if (c === 'copy flash:resume.pdf' || c === 'copy resume' || c === 'download resume') { cliPrint(copyResume()); return; }
     cliPrint('% Invalid input detected at \'^\' marker.\n\n% Type \'?\' for a list of available commands.');
     return;
   }
@@ -941,7 +1121,7 @@ function handleCmd(raw) {
 
 function getCompletions() {
   if (cliMode === 'user') return ['enable','help','show version'];
-  if (cliMode === 'enable') return ['show about','show resume','show skills','show projects','show contact','show version','show running-config','disable','clear','help'];
+  if (cliMode === 'enable') return ['show about','show resume','show skills','show projects','show contact','show version','show running-config','copy flash:resume.pdf','disable','clear','help'];
   return [];
 }
 
@@ -949,25 +1129,21 @@ async function cliBoot() {
   cliInput.disabled = true;
   const print = t => { mkBlock(t, cliOutput); cliOutput.scrollTop = cliOutput.scrollHeight; };
 
+  const disarmSkip = armBootSkip(cliEl);
+
   print('\nSystem Bootstrap, Version 1.0');
-  await sleep(80);
+  await bootSleep(80);
   print('Copyright (c) Jakob Jonasson\n');
-  await sleep(100);
-  await spinLine('Initializing memory... ', 500, cliOutput);
-  await sleep(120);
-  print('Loading jakobos-portfolio.bin .............................');
-  await progressBar(750, cliOutput);
-  await sleep(150);
-  print(
-    '##############################################################\n\n' +
-    '        Jonasson Software - Portfolio Repository System\n' +
-    '                         Version 1.0.5\n\n' +
-    '                 Copyright (c) Jakob Jonasson\n' +
-    '                     All rights reserved.\n\n' +
-    '##############################################################'
-  );
-  await sleep(200);
+  await bootSleep(100);
+  await spinLine('Initializing memory... ', 500, cliOutput, bootSkipped);
+  await bootSleep(120);
+  print(bootLoadingLine());
+  await progressBar(750, cliOutput, bootBarWidth(), bootSkipped);
+  await bootSleep(150);
+  print(bootBanner());
+  await bootSleep(200);
   print('\nPortfolio ready.\n');
+  disarmSkip();
   cliInput.disabled = false;
   cliInput.focus();
 }
@@ -1014,6 +1190,14 @@ document.addEventListener('click', e => {
 
 cliUpdatePrompt();
 </script>
+
+<!-- Cloudflare Web Analytics - free, cookieless, no consent banner needed.
+     To turn on: Cloudflare dashboard -> Analytics & Logs -> Web Analytics ->
+     Add a site, then paste your token below and uncomment. The CSP in
+     _headers already allows the beacon, so nothing else needs to change.
+<script defer src="https://static.cloudflareinsights.com/beacon.min.js"
+        data-cf-beacon='{"token": "YOUR_TOKEN_HERE"}'></script>
+-->
 
 </body>
 </html>

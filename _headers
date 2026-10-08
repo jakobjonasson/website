@@ -1,0 +1,31 @@
+# Cloudflare Pages reads this file from the project root.
+# Verify after deploy at https://securityheaders.com/?q=www.jjonasson.dev
+
+/*
+  X-Content-Type-Options: nosniff
+  X-Frame-Options: DENY
+  Referrer-Policy: strict-origin-when-cross-origin
+  Permissions-Policy: geolocation=(), microphone=(), camera=(), payment=(), usb=()
+  Cross-Origin-Opener-Policy: same-origin
+  Cross-Origin-Resource-Policy: same-origin
+  # 2 years. No `preload` on purpose - preload list removal is slow and manual,
+  # so opt in deliberately rather than by default.
+  Strict-Transport-Security: max-age=63072000; includeSubDomains
+  # script-src needs 'unsafe-inline' because the whole site is one inline
+  # <script>. That is the one thing keeping this from an A+. Everything else is
+  # locked down: no external script origins, no framing, no form posts.
+  # cloudflareinsights.com is pre-allowed for Web Analytics (see index.html).
+  Content-Security-Policy: default-src 'self'; script-src 'self' 'unsafe-inline' https://static.cloudflareinsights.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data:; connect-src 'self' https://cloudflareinsights.com; object-src 'none'; base-uri 'self'; form-action 'none'; frame-ancestors 'none'; upgrade-insecure-requests
+
+# The social card is meant to be fetched by other origins, so the blanket
+# same-origin CORP above must not apply to it.
+/og.png
+  Cross-Origin-Resource-Policy: cross-origin
+  Cache-Control: public, max-age=86400
+
+# The HTML is the whole app, so let it revalidate rather than go stale.
+/index.html
+  Cache-Control: public, max-age=0, must-revalidate
+
+/
+  Cache-Control: public, max-age=0, must-revalidate
