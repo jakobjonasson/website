@@ -3,17 +3,20 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<link rel="icon" href="/favicon.svg" type="image/svg+xml">
-<link rel="icon" href="/favicon.ico" sizes="any">
-<link rel="apple-touch-icon" href="/apple-touch-icon.png">
 <title>Jakob Jonasson — Network Engineer</title>
 <meta name="description" content="Network engineer delivering multi-site enterprise Cisco environments — WAN integration, routing and switching, wireless, and network security. CCNA certified, CCNP Enterprise in progress.">
 <link rel="canonical" href="https://www.jjonasson.dev/">
 <meta name="theme-color" content="#000000">
+
+<!-- sizes="32x32", not "any": with "any", Chrome picks the .ico over the SVG -->
+<link rel="icon" href="/favicon.ico" sizes="32x32">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
+
 <meta property="og:title" content="Jakob Jonasson — Network Engineer">
 <meta property="og:description" content="Multi-site enterprise Cisco environments, WAN integration, CJIS compliance, and network security.">
 <meta property="og:type" content="website">
-<meta property="og:url" content="https://www.jjonasson.dev">
+<meta property="og:url" content="https://www.jjonasson.dev/">
 <meta property="og:site_name" content="jjonasson.dev">
 <meta property="og:image" content="https://www.jjonasson.dev/og.png">
 <meta property="og:image:width" content="1200">
@@ -23,18 +26,18 @@
 <meta name="twitter:title" content="Jakob Jonasson — Network Engineer">
 <meta name="twitter:description" content="Multi-site enterprise Cisco environments, WAN integration, CJIS compliance, and network security.">
 <meta name="twitter:image" content="https://www.jjonasson.dev/og.png">
+
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+
 <script type="application/ld+json">
 {
   "@context": "https://schema.org",
   "@type": "Person",
   "name": "Jakob Jonasson",
-  "url": "https://www.jjonasson.dev",
+  "url": "https://www.jjonasson.dev/",
   "jobTitle": "Network Engineer",
-  "email": "mailto:jakob@jonasson.us",
-  "telephone": "+1-701-610-1058",
   "address": {
     "@type": "PostalAddress",
     "addressLocality": "Grand Forks",
@@ -60,14 +63,21 @@
   ]
 }
 </script>
+
 <style>
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
   :root {
     --bg: #000;
-    --fg: #e0e0e0;
-    --dim: #777;
+    --fg: #e0e0e0;      /* headings, terminal text */
+    --text: #9a9a9a;    /* body copy: 7:1 on black */
+    --dim: #777;        /* meta, labels: 4.7:1 on black, the floor for text */
     --accent: #fff;
+    --panel: #0a0a0a;
+    --line: #1a1a1a;
+    --line-2: #222;
+    --marker: #333;
+    --marker-2: #444;
   }
 
   ::selection { background: var(--fg); color: var(--bg); }
@@ -76,11 +86,12 @@
     height: 100%;
     background: var(--bg);
     color: var(--fg);
-    font-family: 'JetBrains Mono', monospace;
+    font-family: 'JetBrains Mono', ui-monospace, Menlo, Consolas, monospace;
     font-size: 14px;
     line-height: 1.5;
     /* Stop iOS inflating text in landscape - it breaks the ASCII column math */
     -webkit-text-size-adjust: 100%;
+    text-size-adjust: 100%;
   }
 
   /* ── Shared terminal chrome ── */
@@ -96,23 +107,27 @@
 
   .term-topbar {
     flex-shrink: 0;
-    padding: 6px 16px;
-    font-size: 12px;
-    color: var(--dim);
-    border-bottom: 1px solid #1a1a1a;
     display: flex;
     justify-content: space-between;
     align-items: center;
-    background: #0a0a0a;
+    padding: 6px 16px;
+    font-size: 12px;
+    color: var(--dim);
+    background: var(--panel);
+    border-bottom: 1px solid var(--line);
   }
 
-  .term-topbar a {
+  .term-topbar-links { display: flex; gap: 2ch; }
+
+  .term-topbar a,
+  .gui-topbar-links a {
     color: var(--dim);
     text-decoration: none;
     transition: color 0.15s;
   }
 
-  .term-topbar a:hover { color: var(--fg); }
+  .term-topbar a:hover,
+  .gui-topbar-links a:hover { color: var(--fg); }
 
   .term-body {
     flex: 1;
@@ -121,32 +136,32 @@
   }
 
   .term-input-row {
+    flex-shrink: 0;
     display: flex;
     align-items: center;
-    flex-shrink: 0;
     padding: 0 20px 20px;
   }
 
-  .term-input-row .prompt-label {
-    color: var(--fg);
+  .prompt-label {
     flex-shrink: 0;
+    color: var(--fg);
+    white-space: pre;
   }
 
   .term-input-row input {
+    flex: 1;
     background: none;
     border: none;
-    color: var(--fg);
-    font-family: inherit;
-    font-size: inherit;
     outline: none;
-    flex: 1;
+    color: var(--fg);
     caret-color: var(--fg);
-    line-height: 1.5;
+    font: inherit;
   }
 
   .output-block { margin-bottom: 4px; }
-  .prompt-line { color: var(--fg); }
 
+  /* pre-wrap on both so leading spaces survive and the '^' marker lines up */
+  .prompt-line,
   .response {
     white-space: pre-wrap;
     word-break: break-word;
@@ -155,21 +170,21 @@
 
   .dim { color: var(--dim); }
   .bright { color: var(--accent); font-weight: 700; }
+  .cli-link { color: var(--accent); }
 
   /* ── Landing mode links ── */
 
   .mode-link {
     color: var(--fg);
     text-decoration: none;
-    cursor: pointer;
   }
 
   .mode-link:hover {
-    color: #fff;
+    color: var(--accent);
     text-decoration: underline;
   }
 
-  /* ── GUI Portfolio ── */
+  /* ── Portfolio view ── */
 
   .gui-view {
     display: none;
@@ -184,20 +199,17 @@
     position: fixed;
     top: 0; left: 0; right: 0;
     z-index: 100;
-    padding: 10px 24px;
     display: flex;
     justify-content: space-between;
     align-items: center;
-    background: rgba(0,0,0,0.9);
-    backdrop-filter: blur(8px);
-    border-bottom: 1px solid #1a1a1a;
+    padding: 10px 24px;
     font-size: 12px;
+    background: rgba(0, 0, 0, 0.9);
+    backdrop-filter: blur(8px);
+    border-bottom: 1px solid var(--line);
   }
 
-  .gui-topbar-name {
-    color: var(--fg);
-    font-weight: 700;
-  }
+  .gui-topbar-name { color: var(--fg); font-weight: 700; }
 
   .gui-topbar-links {
     display: flex;
@@ -205,58 +217,49 @@
     align-items: center;
   }
 
-  .gui-topbar-links a {
-    color: var(--dim);
-    text-decoration: none;
-    font-size: 12px;
-    transition: color 0.15s;
-  }
-
-  .gui-topbar-links a:hover { color: var(--fg); }
-
   .gui-section {
-    padding: 5rem 24px 3rem;
     max-width: 680px;
     margin: 0 auto;
+    padding: 5rem 24px 3rem;
   }
 
   .gui-section + .gui-section { padding-top: 2.5rem; }
+  .gui-section:last-child { padding-bottom: 5rem; }
 
   .sec-title {
+    margin-bottom: 1.25rem;
     font-size: 11px;
+    font-weight: 400;
     color: var(--dim);
     letter-spacing: 0.15em;
     text-transform: uppercase;
-    margin-bottom: 1.25rem;
-    font-weight: 400;
   }
 
-  .gui-name { font-size: 28px; font-weight: 700; color: #fff; margin-bottom: 4px; }
-  .gui-role { font-size: 14px; color: var(--dim); margin-bottom: 1.25rem; }
+  .gui-name { margin-bottom: 4px; font-size: 28px; font-weight: 700; color: var(--accent); }
+  .gui-role { margin-bottom: 1.25rem; font-size: 14px; color: var(--dim); }
 
   .gui-bio {
-    font-size: 13px;
-    color: var(--dim);
-    line-height: 1.75;
     margin-bottom: 1.5rem;
+    font-size: 13px;
+    line-height: 1.75;
+    color: var(--text);
   }
 
-  .gui-certs { display: flex; gap: 8px; flex-wrap: wrap; }
+  .gui-certs { display: flex; flex-wrap: wrap; gap: 8px; }
 
   .gui-cert {
-    font-size: 11px;
     padding: 3px 8px;
-    border: 1px solid #222;
+    font-size: 11px;
     color: var(--dim);
+    border: 1px solid var(--line-2);
   }
 
   /* Timeline */
 
   .exp-item {
-    border-left: 1px solid #222;
-    padding-left: 20px;
-    padding-bottom: 2rem;
     position: relative;
+    padding: 0 0 2rem 20px;
+    border-left: 1px solid var(--line-2);
   }
 
   .exp-item:last-child { padding-bottom: 0; }
@@ -266,31 +269,31 @@
     position: absolute;
     left: -3px; top: 5px;
     width: 5px; height: 5px;
-    background: #333;
+    background: var(--marker);
   }
 
   .exp-item.current::before { background: var(--fg); }
 
-  .exp-role { font-size: 14px; font-weight: 700; color: var(--fg); margin-bottom: 2px; }
-  .exp-co { font-size: 13px; color: var(--dim); margin-bottom: 2px; }
-  .exp-dates { font-size: 11px; color: #555; margin-bottom: 10px; }
+  .exp-role { margin-bottom: 2px; font-size: 14px; font-weight: 700; color: var(--fg); }
+  .exp-co { margin-bottom: 2px; font-size: 13px; color: var(--text); }
+  .exp-dates { margin-bottom: 10px; font-size: 11px; color: var(--dim); }
 
-  .exp-list { list-style: none; padding: 0; }
+  .exp-list { list-style: none; }
 
   .exp-list li {
-    font-size: 13px;
-    color: var(--dim);
-    line-height: 1.6;
-    padding-left: 14px;
     position: relative;
     margin-bottom: 4px;
+    padding-left: 14px;
+    font-size: 13px;
+    line-height: 1.6;
+    color: var(--text);
   }
 
   .exp-list li::before {
     content: '-';
     position: absolute;
     left: 0;
-    color: #444;
+    color: var(--marker-2);
   }
 
   /* Skills */
@@ -301,51 +304,50 @@
     gap: 16px;
   }
 
-  .skill-box { border: 1px solid #1a1a1a; padding: 16px; }
+  .skill-box { padding: 16px; border: 1px solid var(--line); }
 
   .skill-cat {
+    margin-bottom: 8px;
     font-size: 11px;
     color: var(--dim);
     letter-spacing: 0.1em;
     text-transform: uppercase;
-    margin-bottom: 8px;
   }
 
-  .skill-list { font-size: 13px; color: #555; line-height: 1.65; }
+  .skill-list { font-size: 13px; line-height: 1.65; color: var(--text); }
 
   /* Projects */
 
   .proj {
-    border: 1px solid #1a1a1a;
-    padding: 18px;
     margin-bottom: 12px;
+    padding: 18px;
+    border: 1px solid var(--line);
     transition: border-color 0.15s;
   }
 
-  .proj:hover { border-color: #333; }
+  .proj:hover { border-color: var(--marker); }
 
-  .proj-title { font-size: 14px; font-weight: 700; color: var(--fg); margin-bottom: 4px; }
-  .proj-meta { font-size: 11px; color: #555; margin-bottom: 10px; }
+  .proj-title { margin-bottom: 4px; font-size: 14px; font-weight: 700; color: var(--fg); }
+  .proj-meta { margin-bottom: 10px; font-size: 11px; color: var(--dim); }
+  .proj-desc { font-size: 13px; line-height: 1.6; color: var(--text); }
 
-  .proj-desc { font-size: 13px; color: var(--dim); line-height: 1.6; }
-
-  .proj-tags { display: flex; gap: 6px; flex-wrap: wrap; margin-top: 10px; }
+  .proj-tags { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 10px; }
 
   .proj-tag {
-    font-size: 10px;
     padding: 2px 6px;
-    border: 1px solid #222;
-    color: #555;
+    font-size: 10px;
+    color: var(--dim);
+    border: 1px solid var(--line-2);
   }
 
   /* Contact */
 
   .contact-row {
     display: block;
-    color: var(--dim);
-    text-decoration: none;
-    font-size: 13px;
     margin-bottom: 8px;
+    font-size: 13px;
+    color: var(--text);
+    text-decoration: none;
     transition: color 0.15s;
   }
 
@@ -355,12 +357,12 @@
     display: inline-block;
     width: 80px;
     font-size: 11px;
-    color: #555;
-    text-transform: uppercase;
+    color: var(--dim);
     letter-spacing: 0.08em;
+    text-transform: uppercase;
   }
 
-  /* ── CLI View ── */
+  /* ── Terminal view ── */
 
   .cli-view {
     display: none;
@@ -381,15 +383,15 @@
     .gui-section { padding-left: 16px; padding-right: 16px; }
     .gui-topbar { padding: 8px 16px; }
     .gui-topbar-links { gap: 12px; }
+    .gui-name { font-size: 24px; }
     .skills-grid { grid-template-columns: 1fr; }
+    .term-topbar { padding: 6px 10px; font-size: 11px; }
     .term-body { padding: 10px; }
     .term-input-row { padding: 0 10px 10px; }
-    .term-topbar { padding: 6px 10px; font-size: 11px; }
-    .gui-name { font-size: 24px; }
     /* Stack the label so unbreakable URLs get the full column width */
     .contact-label { display: block; width: auto; margin-bottom: 2px; }
     .contact-row { margin-bottom: 14px; overflow-wrap: anywhere; }
-    /* Tappable mode links - no hover on touch, so give them real targets */
+    /* No hover on touch, so give the mode links real tap targets */
     .mode-link { display: inline-block; padding: 5px 0; }
   }
 
@@ -398,200 +400,216 @@
     html, body { font-size: 12px; }
   }
 </style>
+
+<!-- The boot sequence and terminal are drawn by JS, so without it the landing
+     page would be blank. The portfolio markup is static, so just show it. -->
+<noscript>
+  <style>
+    #landing { display: none; }
+    #gui-view { display: block; }
+    #gui-back { display: none; }
+  </style>
+</noscript>
 </head>
 <body>
 
-<!-- ═══════════════════════════════════ -->
-<!-- LANDING: boot terminal             -->
-<!-- ═══════════════════════════════════ -->
+<!-- ═══════════════════ Landing: boot terminal ═══════════════════ -->
 
 <div class="term-wrap" id="landing">
   <div class="term-topbar">
     <span>jjonasson.dev</span>
-    <span>
-      <a href="mailto:jakob@jonasson.us">email</a>&nbsp;&nbsp;
-      <a href="https://github.com/jakobjonasson" target="_blank" rel="noopener">github</a>&nbsp;&nbsp;
+    <span class="term-topbar-links">
+      <a href="mailto:jakob@jonasson.us">email</a>
+      <a href="https://github.com/jakobjonasson" target="_blank" rel="noopener">github</a>
       <a href="https://www.linkedin.com/in/jakob-jonasson/" target="_blank" rel="noopener">linkedin</a>
     </span>
   </div>
   <div class="term-body" id="boot-output"></div>
 </div>
 
-<!-- The boot sequence is drawn by JS, so without it the landing page is blank.
-     The portfolio markup below is static, so just reveal it. -->
-<noscript>
-  <style>
-    #landing { display: none; }
-    #gui-view { display: block; }
-    .gui-topbar-links #gui-back { display: none; }
-  </style>
-</noscript>
-
-<!-- ═══════════════════════════════════ -->
-<!-- GUI VIEW                           -->
-<!-- ═══════════════════════════════════ -->
+<!-- ═══════════════════ Portfolio view ═══════════════════
+     This markup is the single source of truth for the resume content.
+     The terminal's show commands read it from here, so edit it only here. -->
 
 <div class="gui-view" id="gui-view">
   <nav class="gui-topbar">
     <span class="gui-topbar-name">Jakob Jonasson</span>
     <div class="gui-topbar-links">
       <a href="/resume.pdf" target="_blank" rel="noopener">resume</a>
-      <a href="#" id="gui-back">&lt;- back</a>
+      <a href="/" id="gui-back">&lt;- back</a>
     </div>
   </nav>
 
   <main>
-  <section class="gui-section" id="about" style="padding-top:5rem;">
-    <h2 class="sec-title">About</h2>
-    <h1 class="gui-name">Jakob Jonasson</h1>
-    <p class="gui-role">Network Engineer &middot; Grand Forks, ND</p>
-    <p class="gui-bio">
-      Network engineer with production experience delivering multi-site enterprise Cisco environments. Lead engineer on a client's acquisition of eight poultry production facilities from one of the largest privately held companies in the U.S., separating each site from the parent network and integrating it into the client's WAN. CCNA certified, CCNP Enterprise in progress.
-    </p>
-    <div class="gui-certs">
-      <span class="gui-cert">CCNA</span>
-      <span class="gui-cert">Cisco Certified Specialist - Enterprise Core</span>
-      <span class="gui-cert">CCNP Enterprise (In Progress)</span>
-      <span class="gui-cert">CompTIA Security+</span>
-      <span class="gui-cert">ITIL 4 Foundation</span>
-      <span class="gui-cert">AWS Solutions Architect Associate</span>
-      <span class="gui-cert">AWS CloudOps Engineer Associate</span>
-      <span class="gui-cert">Ruckus Certified WiFi Associate</span>
-    </div>
-  </section>
+    <section class="gui-section" id="about">
+      <p class="sec-title">About</p>
+      <h1 class="gui-name">Jakob Jonasson</h1>
+      <p class="gui-role">Network Engineer &middot; Grand Forks, ND</p>
+      <p class="gui-bio">
+        Network engineer with production experience delivering multi-site enterprise Cisco environments. Lead engineer on a client's acquisition of eight poultry production facilities from one of the largest privately held companies in the U.S., separating each site from the parent network and integrating it into the client's WAN. CCNA certified, CCNP Enterprise in progress.
+      </p>
+      <div class="gui-certs">
+        <span class="gui-cert">CCNA</span>
+        <span class="gui-cert">Cisco Certified Specialist - Enterprise Core</span>
+        <span class="gui-cert">CCNP Enterprise (In Progress)</span>
+        <span class="gui-cert">CompTIA Security+</span>
+        <span class="gui-cert">ITIL 4 Foundation</span>
+        <span class="gui-cert">AWS Solutions Architect Associate</span>
+        <span class="gui-cert">AWS CloudOps Engineer Associate</span>
+        <span class="gui-cert">Ruckus Certified WiFi Associate</span>
+      </div>
+    </section>
 
-  <section class="gui-section" id="experience">
-    <h2 class="sec-title">Experience</h2>
-    <div class="exp-item current">
-      <p class="exp-role">Network Engineer</p>
-      <p class="exp-co">Twotrees Technologies — Grand Forks, ND</p>
-      <p class="exp-dates">Oct 2024 – Present</p>
-      <ul class="exp-list">
-        <li>Sole escalation engineer for a top four U.S. turkey processor supporting their internal IT team for all level 3 escalations and network work as the client grew from 10 to 18 sites across six states in three months, nearly doubling their footprint</li>
-        <li>Planned and led network migrations across eight facilities the same client acquired from Cargill, sole lead engineer on the first three sites, then lead of a two-engineer team on a four-site cutover roughly three times its size, completed in a single Friday–Monday window during four days of facility downtime</li>
-        <li>Replaced legacy SD-WAN with next-generation firewalls and established site-to-site IPsec tunnels integrating each acquired facility into the client's multi-site WAN</li>
-        <li>Operate and extend a 400+ device Cisco campus environment across Catalyst 9500 StackWise Virtual cores, mixed-generation Catalyst access switching, HSRP-redundant distribution carrying OT networks, and 9800 WLC pairs in HA SSO with guest anchor</li>
-        <li>Design and support wireless across Cisco 9800 and Ruckus platforms for plant-floor, warehouse, and office environments</li>
-        <li>Manage SonicWall, Cisco, and Meraki edge across a 200+ firewall fleet, including coordinated zero-day mitigation and Duo MFA with Entra ID SAML SSO for AnyConnect and SonicWall SSLVPN remote access</li>
-        <li>Led CJIS compliance initiatives for county jail and 911 center clients. Met directly with stakeholders to assess gaps, scoped remediation, and implemented solutions end to end</li>
-        <li>Scope and design network refreshes across the firm's client base, assessing current-state environments and producing sized equipment recommendations and bills of materials across Cisco Catalyst, Ruckus, SonicWall, Aruba, and Meraki</li>
-        <li>Deployed PRTG network monitoring, created monitors, automated alerts, and built a status dashboard integrated with internal digital signage</li>
-      </ul>
-    </div>
-    <div class="exp-item">
-      <p class="exp-role">Data Center Technician</p>
-      <p class="exp-co">Core Scientific — Grand Forks, ND</p>
-      <p class="exp-dates">Dec 2023 – Oct 2024</p>
-      <ul class="exp-list">
-        <li>Installed, cabled, and maintained servers and networking equipment in a large-scale data center</li>
-        <li>Led a team of 8 technicians to deploy 7,000+ servers across 4 weeks, finishing the weekly quota days ahead of schedule every week</li>
-        <li>Wrote a multi-threaded Python script that scanned 1,000 IPs at a time to find servers missing from asset tracking</li>
-      </ul>
-    </div>
-  </section>
+    <section class="gui-section" id="experience">
+      <h2 class="sec-title">Experience</h2>
+      <div class="exp-item current">
+        <p class="exp-role">Network Engineer</p>
+        <p class="exp-co">Twotrees Technologies — Grand Forks, ND</p>
+        <p class="exp-dates">Oct 2024 – Present</p>
+        <ul class="exp-list">
+          <li>Sole escalation engineer for a top four U.S. turkey processor supporting their internal IT team for all level 3 escalations and network work as the client grew from 10 to 18 sites across six states in three months, nearly doubling their footprint</li>
+          <li>Planned and led network migrations across eight facilities the same client acquired, sole lead engineer on the first three sites, then lead of a two-engineer team on a four-site cutover roughly three times its size, completed in a single Friday–Monday window during four days of facility downtime</li>
+          <li>Replaced legacy SD-WAN with next-generation firewalls and established site-to-site IPsec tunnels integrating each acquired facility into the client's multi-site WAN</li>
+          <li>Operate and extend a 400+ device Cisco campus environment across Catalyst 9500 StackWise Virtual cores, mixed-generation Catalyst access switching, HSRP-redundant distribution carrying OT networks, and 9800 WLC pairs in HA SSO with guest anchor</li>
+          <li>Design and support wireless across Cisco 9800 and Ruckus platforms for plant-floor, warehouse, and office environments</li>
+          <li>Manage SonicWall, Cisco, and Meraki edge across a 200+ firewall fleet, including coordinated zero-day mitigation and Duo MFA with Entra ID SAML SSO for AnyConnect and SonicWall SSLVPN remote access</li>
+          <li>Led CJIS compliance initiatives for county jail and 911 center clients. Met directly with stakeholders to assess gaps, scoped remediation, and implemented solutions end to end</li>
+          <li>Scope and design network refreshes across the firm's client base, assessing current-state environments and producing sized equipment recommendations and bills of materials across Cisco Catalyst, Ruckus, SonicWall, Aruba, and Meraki</li>
+          <li>Deployed PRTG network monitoring, created monitors, automated alerts, and built a status dashboard integrated with internal digital signage</li>
+        </ul>
+      </div>
+      <div class="exp-item">
+        <p class="exp-role">Data Center Technician</p>
+        <p class="exp-co">Core Scientific — Grand Forks, ND</p>
+        <p class="exp-dates">Dec 2023 – Oct 2024</p>
+        <ul class="exp-list">
+          <li>Installed, cabled, and maintained servers and networking equipment in a large-scale data center</li>
+          <li>Led a team of 8 technicians to deploy 7,000+ servers across 4 weeks, finishing the weekly quota days ahead of schedule every week</li>
+          <li>Wrote a multi-threaded Python script that scanned 1,000 IPs at a time to find servers missing from asset tracking</li>
+        </ul>
+      </div>
+    </section>
 
-  <section class="gui-section" id="education">
-    <h2 class="sec-title">Education</h2>
-    <div class="exp-item">
-      <p class="exp-role">Bachelor of Science, Cloud and Network Engineering</p>
-      <p class="exp-co">Western Governors University</p>
-      <p class="exp-dates">July 2026</p>
-      <ul class="exp-list">
-        <li>Coursework in networking, cloud architecture, virtualization, and security</li>
-      </ul>
-    </div>
-  </section>
+    <section class="gui-section" id="education">
+      <h2 class="sec-title">Education</h2>
+      <div class="exp-item">
+        <p class="exp-role">Bachelor of Science, Cloud and Network Engineering</p>
+        <p class="exp-co">Western Governors University</p>
+        <p class="exp-dates">July 2026</p>
+        <ul class="exp-list">
+          <li>Coursework in networking, cloud architecture, virtualization, and security</li>
+        </ul>
+      </div>
+    </section>
 
-  <section class="gui-section" id="skills">
-    <h2 class="sec-title">Technical Skills</h2>
-    <div class="skills-grid">
-      <div class="skill-box">
-        <p class="skill-cat">Networking</p>
-        <p class="skill-list">Cisco IOS-XE, OSPF, FHRP, 802.1X/RADIUS, VLAN Segmentation, VPN/IPsec, SD-WAN, LAN/WAN, Meraki, Aruba</p>
+    <section class="gui-section" id="skills">
+      <h2 class="sec-title">Technical Skills</h2>
+      <div class="skills-grid">
+        <div class="skill-box">
+          <p class="skill-cat">Networking</p>
+          <p class="skill-list">Cisco IOS-XE, OSPF, BGP, FHRP, 802.1X/RADIUS, VLAN Segmentation, VPN/IPsec, SD-WAN, LAN/WAN, Meraki, Aruba</p>
+        </div>
+        <div class="skill-box">
+          <p class="skill-cat">Security</p>
+          <p class="skill-list">SonicWall, Datto EDR/AV, Duo MFA/SAML SSO, NAC, incident response, vulnerability and firmware lifecycle management</p>
+        </div>
+        <div class="skill-box">
+          <p class="skill-cat">Automation &amp; Cloud</p>
+          <p class="skill-list">Python, AWS (VPC, Security Groups, IAM, Lambda), Git</p>
+        </div>
       </div>
-      <div class="skill-box">
-        <p class="skill-cat">Security</p>
-        <p class="skill-list">SonicWall, Datto EDR/AV, Duo MFA/SAML SSO, NAC, incident response, vulnerability and firmware lifecycle management</p>
-      </div>
-      <div class="skill-box">
-        <p class="skill-cat">Automation &amp; Cloud</p>
-        <p class="skill-list">Python, AWS (VPC, Security Groups, IAM, Lambda), Git</p>
-      </div>
-    </div>
-  </section>
+    </section>
 
-  <section class="gui-section" id="projects">
-    <h2 class="sec-title">Projects</h2>
-    <div class="proj">
-      <p class="proj-title">Eight-Site Acquisition Separation &amp; WAN Integration</p>
-      <p class="proj-meta">Poultry Processing Client · 2025–2026</p>
-      <p class="proj-desc">Lead engineer on a client's acquisition of eight poultry production facilities — breeder, hatchery, feed-mill, and processing sites — from one of the largest privately held companies in the U.S. Separated each site from the parent network and integrated it into the client's WAN: legacy SD-WAN replaced with next-generation firewalls and site-to-site IPsec tunnels, Catalyst 9500 StackWise Virtual cores, HSRP-redundant distribution carrying OT networks, and 9800 WLC pairs in HA SSO. Sole lead engineer on the first three sites, then lead of a two-engineer team on a four-site cutover roughly three times its size, completed in a single Friday–Monday window during four days of facility downtime.</p>
-      <div class="proj-tags">
-        <span class="proj-tag">Cisco 9500 SVL</span>
-        <span class="proj-tag">9800 WLC HA SSO</span>
-        <span class="proj-tag">HSRP</span>
-        <span class="proj-tag">IPsec WAN</span>
-        <span class="proj-tag">8 Facilities</span>
+    <section class="gui-section" id="projects">
+      <h2 class="sec-title">Projects</h2>
+      <div class="proj">
+        <p class="proj-title">Eight-Site Acquisition Separation &amp; WAN Integration</p>
+        <p class="proj-meta">Poultry Processing Client · 2025–2026</p>
+        <p class="proj-desc">Lead engineer on a client's acquisition of eight poultry production facilities — breeder, hatchery, feed-mill, and processing sites — from one of the largest privately held companies in the U.S. Separated each site from the parent network and integrated it into the client's WAN: legacy SD-WAN replaced with next-generation firewalls and site-to-site IPsec tunnels, Catalyst 9500 StackWise Virtual cores, HSRP-redundant distribution carrying OT networks, and 9800 WLC pairs in HA SSO. Sole lead engineer on the first three sites, then lead of a two-engineer team on a four-site cutover roughly three times its size, completed in a single Friday–Monday window during four days of facility downtime.</p>
+        <div class="proj-tags">
+          <span class="proj-tag">Cisco 9500 SVL</span>
+          <span class="proj-tag">9800 WLC HA SSO</span>
+          <span class="proj-tag">HSRP</span>
+          <span class="proj-tag">IPsec WAN</span>
+          <span class="proj-tag">8 Facilities</span>
+        </div>
       </div>
-    </div>
-    <div class="proj">
-      <p class="proj-title">CJIS Compliance Infrastructure</p>
-      <p class="proj-meta">Law Enforcement Client · 2026</p>
-      <p class="proj-desc">Designed and implemented CJIS-compliant network architecture for a law enforcement client. VLAN segmentation, BitLocker with FIPS 140-2 via TPM+PIN, 802.1X with NPS/EAP-TLS, AD CS on dedicated VM, and TLS hardening via GPO.</p>
-      <div class="proj-tags">
-        <span class="proj-tag">CJIS</span>
-        <span class="proj-tag">802.1X</span>
-        <span class="proj-tag">FIPS</span>
-        <span class="proj-tag">AD CS</span>
+      <div class="proj">
+        <p class="proj-title">Hierarchical BGP over IPsec</p>
+        <p class="proj-meta">In progress · 2026</p>
+        <p class="proj-desc">Designing and deploying all-eBGP routing over a hierarchical IPsec topology connecting 22 sites. The large sites are meshed with each other, and each smaller site tunnels to its nearest large site as a regional hub, matching how traffic actually flows: mostly between each large site and the smaller sites around it. Deployment is in progress.</p>
+        <div class="proj-tags">
+          <span class="proj-tag">eBGP</span>
+          <span class="proj-tag">IPsec</span>
+          <span class="proj-tag">Meshed Hubs</span>
+          <span class="proj-tag">22 Sites</span>
+        </div>
       </div>
-    </div>
-    <div class="proj">
-      <p class="proj-title">Hybrid Cloud Network Capstone Project</p>
-      <p class="proj-meta">Western Governors University · 2026</p>
-      <p class="proj-desc">Designed and implemented a hybrid on-prem/cloud network for a simulated retail client. IPsec site-to-site VPN to AWS, EC2 workloads, and security-group segmentation enforced between cloud resources and on-premises infrastructure.</p>
-      <div class="proj-tags">
-        <span class="proj-tag">AWS</span>
-        <span class="proj-tag">IPSec</span>
-        <span class="proj-tag">Network Segmentation</span>
+      <div class="proj">
+        <p class="proj-title">CJIS Compliance Infrastructure</p>
+        <p class="proj-meta">Law Enforcement Client · 2026</p>
+        <p class="proj-desc">Designed and implemented CJIS-compliant network architecture for a law enforcement client. VLAN segmentation, BitLocker with TPM+PIN, 802.1X with NPS/EAP-TLS, AD CS on dedicated VM, and TLS hardening via GPO.</p>
+        <div class="proj-tags">
+          <span class="proj-tag">CJIS</span>
+          <span class="proj-tag">802.1X</span>
+          <span class="proj-tag">AD CS</span>
+        </div>
       </div>
-    </div>
-  </section>
+      <div class="proj">
+        <p class="proj-title">Hybrid Cloud Network Capstone Project</p>
+        <p class="proj-meta">Western Governors University · 2026</p>
+        <p class="proj-desc">Designed and implemented a hybrid on-prem/cloud network for a simulated retail client. IPsec site-to-site VPN to AWS, EC2 workloads, and security-group segmentation enforced between cloud resources and on-premises infrastructure.</p>
+        <div class="proj-tags">
+          <span class="proj-tag">AWS</span>
+          <span class="proj-tag">IPsec</span>
+          <span class="proj-tag">Network Segmentation</span>
+        </div>
+      </div>
+    </section>
 
-  <section class="gui-section" id="contact" style="padding-bottom:5rem;">
-    <h2 class="sec-title">Contact</h2>
-    <a href="tel:+17016101058" class="contact-row"><span class="contact-label">Phone</span>701-610-1058</a>
-    <a href="mailto:jakob@jonasson.us" class="contact-row"><span class="contact-label">Email</span>jakob@jonasson.us</a>
-    <a href="https://github.com/jakobjonasson" target="_blank" rel="noopener" class="contact-row"><span class="contact-label">GitHub</span>github.com/jakobjonasson</a>
-    <a href="https://www.linkedin.com/in/jakob-jonasson/" target="_blank" rel="noopener" class="contact-row"><span class="contact-label">LinkedIn</span>linkedin.com/in/jakob-jonasson</a>
-    <a href="/resume.pdf" target="_blank" rel="noopener" class="contact-row"><span class="contact-label">Resume</span>resume.pdf</a>
-  </section>
+    <section class="gui-section" id="contact">
+      <h2 class="sec-title">Contact</h2>
+      <a href="mailto:jakob@jonasson.us" class="contact-row"><span class="contact-label">Email</span>jakob@jonasson.us</a>
+      <a href="https://github.com/jakobjonasson" target="_blank" rel="noopener" class="contact-row"><span class="contact-label">GitHub</span>github.com/jakobjonasson</a>
+      <a href="https://www.linkedin.com/in/jakob-jonasson/" target="_blank" rel="noopener" class="contact-row"><span class="contact-label">LinkedIn</span>linkedin.com/in/jakob-jonasson</a>
+      <a href="/resume.pdf" target="_blank" rel="noopener" class="contact-row"><span class="contact-label">Resume</span>resume.pdf</a>
+    </section>
   </main>
 </div>
 
-<!-- ═══════════════════════════════════ -->
-<!-- CLI VIEW                           -->
-<!-- ═══════════════════════════════════ -->
+<!-- ═══════════════════ Terminal view ═══════════════════ -->
 
 <div class="cli-view" id="cli-view">
   <div class="term-wrap">
     <div class="term-topbar">
       <span>jjonasson.dev — terminal</span>
-      <a href="#" id="cli-back">&lt;- back</a>
+      <a href="/" id="cli-back">&lt;- back</a>
     </div>
     <div class="term-body" id="cli-output"></div>
     <div class="term-input-row">
-      <span class="prompt-label" id="cli-prompt">Username: </span>
+      <label class="prompt-label" id="cli-prompt" for="cli-input">Username: </label>
       <input type="text" id="cli-input" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false">
     </div>
   </div>
 </div>
 
 <script>
+'use strict';
+
 // ════════════════════════════════════
-// Shared helpers
+// Helpers
 // ════════════════════════════════════
 
-function sleep(ms) { return new Promise(r => setTimeout(r, ms)); }
+const $ = (sel, root = document) => root.querySelector(sel);
+const $$ = (sel, root = document) => [...root.querySelectorAll(sel)];
+const sleep = ms => new Promise(r => setTimeout(r, ms));
+
+// Text of an element with the HTML source's indentation collapsed.
+const txt = el => (el ? el.textContent.replace(/\s+/g, ' ').trim() : '');
+
+function escapeHtml(s) {
+  return String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+}
 
 function mkBlock(html, parent) {
   const d = document.createElement('div');
@@ -601,23 +619,32 @@ function mkBlock(html, parent) {
   return d;
 }
 
-function escapeHtml(s) {
-  return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+// Greedy word wrap. `first` prefixes the first line, `rest` the continuations.
+function wrap(text, width, first = '', rest = '') {
+  const lines = [];
+  let line = first;
+  let fresh = true;
+  for (const word of text.split(' ')) {
+    if (!fresh && line.length + 1 + word.length > width) {
+      lines.push(line);
+      line = rest + word;
+    } else {
+      line += (fresh ? '' : ' ') + word;
+    }
+    fresh = false;
+  }
+  lines.push(line);
+  return lines.join('\n');
 }
 
 async function spinLine(prefix, ms, parent, skip) {
-  const frames = ['/','-','\\','|'];
-  const d = document.createElement('div');
-  d.className = 'output-block';
-  const inner = document.createElement('div');
-  inner.className = 'response';
+  const frames = ['/', '-', '\\', '|'];
+  const inner = mkBlock('', parent).firstChild;
   inner.textContent = prefix + frames[0];
-  d.appendChild(inner);
-  parent.appendChild(d);
   parent.scrollTop = parent.scrollHeight;
   const step = 80;
   for (let i = 1; i * step < ms; i++) {
-    if (skip && skip()) break;
+    if (skip()) break;
     await sleep(step);
     inner.textContent = prefix + frames[i % frames.length];
   }
@@ -625,24 +652,18 @@ async function spinLine(prefix, ms, parent, skip) {
 }
 
 async function progressBar(ms, parent, width, skip) {
-  const w = width || 55;
-  const d = document.createElement('div');
-  d.className = 'output-block';
-  const inner = document.createElement('div');
-  inner.className = 'response';
-  d.appendChild(inner);
-  parent.appendChild(d);
-  for (let i = 0; i <= w; i++) {
-    if (skip && skip()) i = w; // jump straight to a full bar
-    const pct = Math.round((i/w)*100).toString().padStart(3,' ');
-    inner.textContent = '[' + '#'.repeat(i) + ' '.repeat(w-i) + '] ' + pct + '%';
+  const inner = mkBlock('', parent).firstChild;
+  for (let i = 0; i <= width; i++) {
+    if (skip()) i = width; // jump straight to a full bar
+    const pct = String(Math.round((i / width) * 100)).padStart(3, ' ');
+    inner.textContent = '[' + '#'.repeat(i) + ' '.repeat(width - i) + '] ' + pct + '%';
     parent.scrollTop = parent.scrollHeight;
-    if (i < w) await sleep(ms / w);
+    if (i < width) await sleep(ms / width);
   }
 }
 
 // ════════════════════════════════════
-// Narrow-viewport boot art
+// Boot sequence (shared by landing and terminal)
 // ════════════════════════════════════
 
 // Width-based rather than user-agent based: this also covers a narrow desktop
@@ -651,7 +672,7 @@ const NARROW_MQ = window.matchMedia('(max-width: 600px)');
 const isNarrow = () => NARROW_MQ.matches;
 
 // The wide banner is 62 columns; the narrow one is 36, which fits a 320px
-// screen at the mobile font size. Keep both centered to their own rule width.
+// screen at the mobile font size. Each is centered to its own rule width.
 const RULE_WIDE = '#'.repeat(62);
 const RULE_NARROW = '#'.repeat(36);
 
@@ -672,28 +693,17 @@ const BANNER_NARROW =
   '        All rights reserved.\n\n' +
   RULE_NARROW;
 
-const bootBanner = () => isNarrow() ? BANNER_NARROW : BANNER_WIDE;
-const bootLoadingLine = () =>
-  'Loading jakobs-portfolio.bin ' + '.'.repeat(isNarrow() ? 6 : 29);
-const bootBarWidth = () => isNarrow() ? 28 : 55;
-
-// ── Boot skip ──
 // A click, tap or keypress fast-forwards the boot. Every line still prints in
 // order; the sequence just stops waiting between them, so the finished
 // transcript is identical to one that ran at full length.
-
-let bootSkip = false;
+let bootSkip = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 const bootSkipped = () => bootSkip;
-const bootSleep = ms => bootSkip ? Promise.resolve() : sleep(ms);
+const bootSleep = ms => (bootSkip ? Promise.resolve() : sleep(ms));
 
 // Returns a disarm function; call it once the boot has finished so these
 // listeners do not swallow a click meant for the menu.
 function armBootSkip(el) {
-  // Visitors who asked their OS for reduced motion get the finished state.
-  if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
-    bootSkip = true;
-    return () => {};
-  }
+  if (bootSkip) return () => {};
   const trip = () => { bootSkip = true; disarm(); };
   const onKey = e => {
     if (e.metaKey || e.ctrlKey || e.altKey) return; // leave browser shortcuts alone
@@ -710,308 +720,269 @@ function armBootSkip(el) {
   return disarm;
 }
 
-// ════════════════════════════════════
-// View management
-// ════════════════════════════════════
-
-const landingEl = document.getElementById('landing');
-const guiEl = document.getElementById('gui-view');
-const cliEl = document.getElementById('cli-view');
-let cliBooted = false;
-
-function showLanding() {
-  landingEl.style.display = '';
-  guiEl.classList.remove('active');
-  cliEl.classList.remove('active');
-  document.body.style.overflow = '';
-  window.scrollTo(0,0);
-  history.pushState(null,'','/');
-}
-
-function showGui() {
-  landingEl.style.display = 'none';
-  guiEl.classList.add('active');
-  cliEl.classList.remove('active');
-  document.body.style.overflow = '';
-  window.scrollTo(0,0);
-  history.pushState(null,'','#portfolio');
-}
-
-function showCli() {
-  landingEl.style.display = 'none';
-  guiEl.classList.remove('active');
-  cliEl.classList.add('active');
-  document.body.style.overflow = 'hidden';
-  history.pushState(null,'','#terminal');
-  if (!cliBooted) {
-    cliBooted = true;
-    cliBoot().then(() => cliInput.focus());
-  } else {
-    cliInput.focus();
-  }
-}
-
-document.getElementById('gui-back').addEventListener('click', e => { e.preventDefault(); showLanding(); });
-document.getElementById('cli-back').addEventListener('click', e => { e.preventDefault(); showLanding(); });
-
-window.addEventListener('popstate', () => {
-  const h = location.hash;
-  if (h === '#portfolio') showGui();
-  else if (h === '#terminal') showCli();
-  else showLanding();
-});
-
-// ════════════════════════════════════
-// Landing boot sequence
-// ════════════════════════════════════
-
-const bootOut = document.getElementById('boot-output');
-
-async function landingBoot() {
-  const print = t => { mkBlock(t, bootOut); bootOut.scrollTop = bootOut.scrollHeight; };
-  const disarmSkip = armBootSkip(landingEl);
+async function runBoot(out, root) {
+  const print = t => { mkBlock(escapeHtml(t), out); out.scrollTop = out.scrollHeight; };
+  const disarm = armBootSkip(root);
 
   await bootSleep(200);
   print('\nSystem Bootstrap, Version 1.0');
   await bootSleep(80);
   print('Copyright (c) Jakob Jonasson\n');
   await bootSleep(100);
-
-  await spinLine('Initializing memory... ', 500, bootOut, bootSkipped);
+  await spinLine('Initializing memory... ', 500, out, bootSkipped);
   await bootSleep(120);
-
-  print(bootLoadingLine());
-  await progressBar(750, bootOut, bootBarWidth(), bootSkipped);
+  print('Loading jakobs-portfolio.bin ' + '.'.repeat(isNarrow() ? 6 : 29));
+  await progressBar(750, out, isNarrow() ? 28 : 55, bootSkipped);
   await bootSleep(150);
-
-  print(bootBanner());
+  print(isNarrow() ? BANNER_NARROW : BANNER_WIDE);
   await bootSleep(200);
-
   print('\nPortfolio ready.\n');
+
+  disarm();
+}
+
+// ════════════════════════════════════
+// Views
+// ════════════════════════════════════
+
+const landingEl = $('#landing');
+const guiEl = $('#gui-view');
+const cliEl = $('#cli-view');
+const bootOut = $('#boot-output');
+
+let view = null;
+let landingBooted = false;
+let menuReady = false;
+let cliBooted = false;
+
+const viewFromHash = () =>
+  location.hash === '#portfolio' ? 'portfolio' :
+  location.hash === '#terminal' ? 'terminal' : 'landing';
+
+// `push` is false when responding to the URL (initial load, back/forward):
+// pushing there would duplicate entries and wipe the forward history.
+function setView(name, push = true) {
+  if (name === view) return;
+  view = name;
+
+  landingEl.style.display = name === 'landing' ? '' : 'none';
+  guiEl.classList.toggle('active', name === 'portfolio');
+  cliEl.classList.toggle('active', name === 'terminal');
+  document.body.style.overflow = name === 'terminal' ? 'hidden' : '';
+
+  if (push) {
+    history.pushState(null, '', name === 'landing' ? location.pathname + location.search : '#' + name);
+  }
+
+  if (name === 'landing' && !landingBooted) {
+    landingBooted = true;
+    landingBoot();
+  } else if (name === 'portfolio') {
+    window.scrollTo(0, 0);
+  } else if (name === 'terminal') {
+    if (!cliBooted) {
+      cliBooted = true;
+      cliBoot();
+    } else {
+      cliInput.focus();
+    }
+  }
+}
+
+async function landingBoot() {
+  await runBoot(bootOut, landingEl);
   await bootSleep(100);
 
-  disarmSkip();
+  // Real hrefs so the links are focusable, announced as links, and work
+  // without JS; the click handler below takes over so pushState owns history.
+  const gui = '<a class="mode-link" href="#portfolio" data-view="portfolio">[1]  Portfolio</a>';
+  const cli = '<a class="mode-link" href="#terminal" data-view="terminal">[2]  Terminal</a>';
+  const guiNote = '<span class="dim">scrollable overview</span>';
+  const cliNote = '<span class="dim">interactive CLI (try: sh run)</span>';
 
-  // Mode selection as terminal output. On a narrow screen the descriptions go
-  // on their own line instead of trailing the link, which would wrap mid-word.
-  const sel = document.createElement('div');
-  sel.className = 'output-block';
-  // Real hrefs so the links are focusable, announced as links, and still work
-  // with JS off; the handlers preventDefault so pushState owns the history.
-  const GUI_LINK = '<a class="mode-link" id="pick-gui" href="#portfolio">[1]  Portfolio</a>';
-  const CLI_LINK = '<a class="mode-link" id="pick-cli" href="#terminal">[2]  Terminal</a>';
-  sel.innerHTML = isNarrow()
-    ? '<div class="response">' +
-      'Select interface:\n\n' +
-      '  ' + GUI_LINK + '\n' +
-      '       <span class="dim">scrollable overview</span>\n' +
-      '  ' + CLI_LINK + '\n' +
-      '       <span class="dim">interactive CLI (try: sh run)</span>\n' +
-      '</div>'
-    : '<div class="response">' +
-      'Select interface:\n\n' +
-      '  ' + GUI_LINK + '   <span class="dim">scrollable overview</span>\n' +
-      '  ' + CLI_LINK + '    <span class="dim">interactive CLI (try: sh run)</span>\n' +
-      '</div>';
-  bootOut.appendChild(sel);
+  // On a narrow screen the descriptions go on their own line instead of
+  // trailing the link, which would wrap mid-word.
+  mkBlock('Select interface:\n\n' + (isNarrow()
+    ? '  ' + gui + '\n       ' + guiNote + '\n  ' + cli + '\n       ' + cliNote + '\n'
+    : '  ' + gui + '   ' + guiNote + '\n  ' + cli + '    ' + cliNote + '\n'), bootOut);
   bootOut.scrollTop = bootOut.scrollHeight;
-
-  document.getElementById('pick-gui').addEventListener('click', e => { e.preventDefault(); showGui(); });
-  document.getElementById('pick-cli').addEventListener('click', e => { e.preventDefault(); showCli(); });
-
-  // Keyboard: press 1 or 2
-  function onKey(e) {
-    if (e.key === '1') { document.removeEventListener('keydown', onKey); showGui(); }
-    if (e.key === '2') { document.removeEventListener('keydown', onKey); showCli(); }
-  }
-  document.addEventListener('keydown', onKey);
+  menuReady = true;
 }
 
-// Handle direct navigation to hash on load
-window.addEventListener('DOMContentLoaded', () => {
-  const h = location.hash;
-  if (h === '#portfolio') { landingEl.style.display = 'none'; showGui(); }
-  else if (h === '#terminal') { landingEl.style.display = 'none'; showCli(); }
-  else { landingBoot(); }
+bootOut.addEventListener('click', e => {
+  const link = e.target.closest('.mode-link');
+  if (!link) return;
+  e.preventDefault();
+  setView(link.dataset.view);
 });
 
+// Press 1 or 2 on the landing menu. One listener for the page's lifetime,
+// gated on the current view, so typing in the terminal never triggers it.
+document.addEventListener('keydown', e => {
+  if (view !== 'landing' || !menuReady || e.metaKey || e.ctrlKey || e.altKey) return;
+  if (e.key === '1') setView('portfolio');
+  else if (e.key === '2') setView('terminal');
+});
+
+for (const id of ['#gui-back', '#cli-back']) {
+  $(id).addEventListener('click', e => { e.preventDefault(); setView('landing'); });
+}
+
+window.addEventListener('popstate', () => setView(viewFromHash(), false));
+
 // ════════════════════════════════════
-// CLI engine
+// Terminal: output built from the portfolio markup
 // ════════════════════════════════════
 
-const cliOutput = document.getElementById('cli-output');
-const cliInput = document.getElementById('cli-input');
-const cliPromptEl = document.getElementById('cli-prompt');
+const cliOutput = $('#cli-output');
+const cliInput = $('#cli-input');
+const cliPromptEl = $('#cli-prompt');
 
-let cliMode = 'login';
 const HOSTNAME = 'portfolio';
-let cliUser = '';
-let cmdHistory = [];
-let histIdx = -1;
-let tabMatches = [];
-let tabIdx = -1;
-let tabOrig = '';
+const LOADED_AT = Date.now();
 
-function cliGetPrompt() {
-  if (cliMode === 'login') return 'Username: ';
-  if (cliMode === 'user') return cliUser + '@' + HOSTNAME + '>';
-  return cliUser + '@' + HOSTNAME + '#';
+// Columns that fit the terminal right now, capped at 80 like a real console.
+function termCols() {
+  const probe = document.createElement('span');
+  probe.style.cssText = 'position:absolute;visibility:hidden;white-space:pre';
+  probe.textContent = 'M'.repeat(50);
+  cliOutput.appendChild(probe);
+  const ch = probe.getBoundingClientRect().width / 50;
+  probe.remove();
+  if (!ch) return 80;
+  const cs = getComputedStyle(cliOutput);
+  const avail = cliOutput.clientWidth - parseFloat(cs.paddingLeft) - parseFloat(cs.paddingRight);
+  return Math.max(30, Math.min(80, Math.floor(avail / ch)));
 }
 
-function cliUpdatePrompt() { cliPromptEl.textContent = cliGetPrompt(); }
+const sentence = s => (/[.!?]$/.test(s) ? s : s + '.');
+const bullet = (s, w) => wrap(sentence(s), w, ' ! ', ' !   ');
 
-function cliPrint(html) { mkBlock(html, cliOutput); cliOutput.scrollTop = cliOutput.scrollHeight; }
-
-function cliPromptLine(cmd) {
-  const d = document.createElement('div');
-  d.className = 'output-block';
-  d.innerHTML = '<div class="prompt-line">' + cliGetPrompt() + escapeHtml(cmd) + '</div>';
-  cliOutput.appendChild(d);
-}
-
-function showVersion() {
-  return 'Portfolio Repository System\n' +
-    'Copyright (c) Jakob Jonasson. All rights reserved.\n\n' +
-    'Jonasson Software, Version 1.0.5\n' +
-    'Compiled ' + new Date().toLocaleDateString('en-US',{weekday:'short',year:'numeric',month:'short',day:'numeric'}) + '\n\n' +
-    'ROM: System Bootstrap, Version 1.0\n' +
-    'BOOTLDR: PRS Boot Loader, Version 1.0\n\n' +
-    'System returned to ROM by power-on\n' +
-    'System image file is "flash:jakobs-portfolio.bin"\n\n' +
-    'Portfolio uptime is since ' + new Date().toUTCString() + '\n' +
-    'System restarted by power-on\n\n' +
-    'Configuration register is 0x2102';
-}
+const ASCII_NAME =
+  '     _       _         _     \n' +
+  '    | | __ _| | _____ | |__  \n' +
+  ' _  | |/ _` | |/ / _ \\| \'_ \\ \n' +
+  '| |_| | (_| |   < (_) | |_) |\n' +
+  ' \\___/ \\__,_|_|\\_\\___/|_.__/ ';
 
 function showAbout() {
-  return '\n' +
-    '     _       _         _     \n' +
-    '    | | __ _| | _____ | |__  \n' +
-    ' _  | |/ _` | |/ / _ \\| \'_ \\ \n' +
-    '| |_| | (_| |   < (_) | |_) |\n' +
-    ' \\___/ \\__,_|_|\\_\\___/|_.__/ \n\n' +
-    'Jakob Jonasson\n' +
-    '────────────────────────────────\n\n' +
-    'Network engineer with production experience delivering multi-site enterprise\n' +
-    'Cisco environments. Lead engineer on a client\'s acquisition of eight poultry\n' +
-    'production facilities from one of the largest privately held companies in the\n' +
-    'U.S., separating each site from the parent network and integrating it into the\n' +
-    'client\'s WAN.\n' +
-    '\n' +
-    'Certifications: CCNA, Cisco Certified Specialist - Enterprise Core, CCNP\n' +
-    'Enterprise (in progress), CompTIA Security+, ITIL 4 Foundation, AWS Solutions\n' +
-    'Architect Associate, AWS CloudOps Engineer Associate, Ruckus Certified WiFi\n' +
-    'Associate.\n';
+  const w = termCols();
+  const certs = $$('#about .gui-cert').map(txt).join(', ');
+  return escapeHtml([
+    '', ASCII_NAME, '',
+    txt($('#about .gui-name')),
+    '─'.repeat(32), '',
+    wrap(txt($('#about .gui-bio')), w), '',
+    wrap('Certifications: ' + certs + '.', w), '',
+  ].join('\n'));
+}
+
+// One timeline entry as an interface stanza. Current roles are "no shutdown".
+function ifaceStanza(item, n, joiner, w) {
+  const lines = [
+    'interface C0/' + n,
+    ' description ' + txt($('.exp-role', item)) + joiner + txt($('.exp-co', item)),
+    ' ! ' + txt($('.exp-dates', item)),
+    ' !',
+    ...$$('li', item).map(li => bullet(txt(li), w)),
+    item.classList.contains('current') ? ' no shutdown' : ' shutdown',
+  ];
+  return lines.join('\n');
 }
 
 function showResume() {
-  return '! --- Experience ---\n' +
-    '\n' +
-    'interface C0/0\n' +
-    ' description Network Engineer at Twotrees Technologies – Grand Forks, ND\n' +
-    ' ! Oct 2024 - Present\n' +
-    ' !\n' +
-    ' ! Sole escalation engineer for a top four U.S. turkey processor supporting\n' +
-    ' !   their internal IT team for all level 3 escalations and network work as the\n' +
-    ' !   client grew from 10 to 18 sites across six states in three months, nearly\n' +
-    ' !   doubling their footprint.\n' +
-    ' ! Planned and led network migrations across eight facilities the same client\n' +
-    ' !   acquired from Cargill, sole lead engineer on the first three sites, then\n' +
-    ' !   lead of a two-engineer team on a four-site cutover roughly three times its\n' +
-    ' !   size, completed in a single Friday–Monday window during four days of\n' +
-    ' !   facility downtime.\n' +
-    ' ! Replaced legacy SD-WAN with next-generation firewalls and established\n' +
-    ' !   site-to-site IPsec tunnels integrating each acquired facility into the\n' +
-    ' !   client\'s multi-site WAN.\n' +
-    ' ! Operate and extend a 400+ device Cisco campus environment across Catalyst\n' +
-    ' !   9500 StackWise Virtual cores, mixed-generation Catalyst access switching,\n' +
-    ' !   HSRP-redundant distribution carrying OT networks, and 9800 WLC pairs in HA\n' +
-    ' !   SSO with guest anchor.\n' +
-    ' ! Design and support wireless across Cisco 9800 and Ruckus platforms for\n' +
-    ' !   plant-floor, warehouse, and office environments.\n' +
-    ' ! Manage SonicWall, Cisco, and Meraki edge across a 200+ firewall fleet,\n' +
-    ' !   including coordinated zero-day mitigation and Duo MFA with Entra ID SAML\n' +
-    ' !   SSO for AnyConnect and SonicWall SSLVPN remote access.\n' +
-    ' ! Led CJIS compliance initiatives for county jail and 911 center clients.\n' +
-    ' !   Met directly with stakeholders to assess gaps, scoped remediation, and\n' +
-    ' !   implemented solutions end to end.\n' +
-    ' ! Scope and design network refreshes across the firm\'s client base,\n' +
-    ' !   assessing current-state environments and producing sized equipment\n' +
-    ' !   recommendations and bills of materials across Cisco Catalyst, Ruckus,\n' +
-    ' !   SonicWall, Aruba, and Meraki.\n' +
-    ' ! Deployed PRTG network monitoring, created monitors, automated alerts, and\n' +
-    ' !   built a status dashboard integrated with internal digital signage.\n' +
-    ' no shutdown\n' +
-    '\n' +
-    'interface C0/1\n' +
-    ' description Data Center Technician at Core Scientific – Grand Forks, ND\n' +
-    ' ! Dec 2023 - Oct 2024\n' +
-    ' !\n' +
-    ' ! Installed, cabled, and maintained servers and networking equipment in a\n' +
-    ' !   large-scale data center.\n' +
-    ' ! Led a team of 8 technicians to deploy 7,000+ servers across 4 weeks,\n' +
-    ' !   finishing the weekly quota days ahead of schedule every week.\n' +
-    ' ! Wrote a multi-threaded Python script that scanned 1,000 IPs at a time to\n' +
-    ' !   find servers missing from asset tracking.\n' +
-    ' shutdown\n' +
-    '\n' +
-    '! --- Education ---\n' +
-    '\n' +
-    'interface C0/2\n' +
-    ' description Bachelor of Science, Cloud and Network Engineering, Western Governors University\n' +
-    ' ! July 2026\n' +
-    ' !\n' +
-    ' ! Coursework in networking, cloud architecture, virtualization, and\n' +
-    ' !   security.\n' +
-    ' shutdown';
+  const w = termCols();
+  let n = 0;
+  const jobs = $$('#experience .exp-item').map(el => ifaceStanza(el, n++, ' at ', w));
+  const school = $$('#education .exp-item').map(el => ifaceStanza(el, n++, ', ', w));
+  return escapeHtml(
+    '! --- Experience ---\n\n' + jobs.join('\n\n') +
+    '\n\n! --- Education ---\n\n' + school.join('\n\n'));
 }
 
 function showSkills() {
-  return '! --- Technical Skills ---\n' +
-    '\n' +
-    'access-list 100 permit   Networking     Cisco IOS-XE, OSPF, FHRP, 802.1X/RADIUS,\n' +
-    '                                        VLAN Segmentation, VPN/IPsec, SD-WAN,\n' +
-    '                                        LAN/WAN, Meraki, Aruba\n' +
-    'access-list 200 permit   Security       SonicWall, Datto EDR/AV, Duo MFA/SAML\n' +
-    '                                        SSO, NAC, incident response,\n' +
-    '                                        vulnerability and firmware lifecycle\n' +
-    '                                        management\n' +
-    'access-list 300 permit   Automation     Python, AWS (VPC, Security Groups, IAM,\n' +
-    '                                        Lambda), Git';
+  const w = termCols();
+  const boxes = $$('#skills .skill-box');
+  const cats = boxes.map(b => txt($('.skill-cat', b)));
+  const catWidth = Math.max(...cats.map(c => c.length)) + 2;
+  const lines = boxes.map((box, i) => {
+    const head = 'access-list ' + (i + 1) * 100 + ' permit   ' + cats[i].padEnd(catWidth);
+    const list = txt($('.skill-list', box));
+    // Too narrow for a second column: put the list on its own indented lines.
+    return w - head.length < 24
+      ? head.trimEnd() + '\n' + wrap(list, w, '    ', '    ')
+      : wrap(list, w, head, ' '.repeat(head.length));
+  });
+  return escapeHtml('! --- Technical Skills ---\n\n' + lines.join('\n'));
 }
 
 function showProjects() {
-  return '! --- Project Portfolio ---\n\n' +
-    'interface Project0/0\n' +
-    ' description Eight-Site Acquisition Separation & WAN Integration (Poultry Processing Client, 2025-2026)\n' +
-    ' ! Lead engineer on a client\'s acquisition of eight poultry production\n' +
-    ' !   facilities — breeder, hatchery, feed-mill, and processing sites — from one\n' +
-    ' !   of the largest privately held companies in the U.S. Separated each site\n' +
-    ' !   from the parent network and integrated it into the client\'s WAN: legacy\n' +
-    ' !   SD-WAN replaced with next-generation firewalls and site-to-site IPsec\n' +
-    ' !   tunnels, Catalyst 9500 StackWise Virtual cores, HSRP-redundant\n' +
-    ' !   distribution carrying OT networks, and 9800 WLC pairs in HA SSO. Sole lead\n' +
-    ' !   engineer on the first three sites, then lead of a two-engineer team on a\n' +
-    ' !   four-site cutover roughly three times its size, completed in a single\n' +
-    ' !   Friday–Monday window during four days of facility downtime.\n' +
-    ' ! Tags: Cisco 9500 SVL, 9800 WLC HA SSO, HSRP, IPsec WAN, 8 Facilities\n' +
-    ' no shutdown\n\n' +
-    'interface Project0/1\n' +
-    ' description CJIS Compliance Infrastructure (Law Enforcement Client, 2026)\n' +
-    ' ! Designed and implemented CJIS-compliant network architecture for a law\n' +
-    ' !   enforcement client. VLAN segmentation, BitLocker with FIPS 140-2 via\n' +
-    ' !   TPM+PIN, 802.1X with NPS/EAP-TLS, AD CS on dedicated VM, and TLS\n' +
-    ' !   hardening via GPO.\n' +
-    ' ! Tags: CJIS, 802.1X, FIPS, AD CS\n' +
-    ' no shutdown\n\n' +
-    'interface Project0/2\n' +
-    ' description Hybrid Cloud Network Capstone Project (Western Governors University, 2026)\n' +
-    ' ! Designed and implemented a hybrid on-prem/cloud network for a simulated\n' +
-    ' !   retail client. IPsec site-to-site VPN to AWS, EC2 workloads, and\n' +
-    ' !   security-group segmentation enforced between cloud resources and\n' +
-    ' !   on-premises infrastructure.\n' +
-    ' ! Tags: AWS, IPSec, Network Segmentation\n' +
-    ' no shutdown';
+  const w = termCols();
+  const stanzas = $$('#projects .proj').map((p, i) => [
+    'interface Project0/' + i,
+    ' description ' + txt($('.proj-title', p)) + ' (' + txt($('.proj-meta', p)).replace(' · ', ', ') + ')',
+    bullet(txt($('.proj-desc', p)), w),
+    wrap('Tags: ' + $$('.proj-tag', p).map(txt).join(', '), w, ' ! ', ' !   '),
+    ' no shutdown',
+  ].join('\n'));
+  return escapeHtml('! --- Project Portfolio ---\n\n' + stanzas.join('\n\n'));
+}
+
+// Read the address back out of the DOM instead of holding it as a literal.
+// Cloudflare's Scrape Shield rewrites mailto: links in the HTML but cannot see
+// inside this script, so a literal here would be the one address left in plain
+// text for scrapers. By the time anyone reaches 'show contact', the decode
+// script has restored the real href.
+function getEmail() {
+  const a = $('a[href^="mailto:"]');
+  return a ? a.href.slice(7) : 'see contact links above';
+}
+
+const ROUTE_PREFIX = { Email: '25.0.5.87', GitHub: '22.0.0.0', LinkedIn: '10.0.0.0' };
+
+function showContact() {
+  const lines = $$('#contact .contact-row')
+    .map(a => ({ a, label: txt($('.contact-label', a)) }))
+    .filter(({ label }) => label in ROUTE_PREFIX)
+    .map(({ a, label }) => {
+      const target = label === 'Email'
+        ? escapeHtml(getEmail())
+        : '<a class="cli-link" href="' + escapeHtml(a.href) + '" target="_blank" rel="noopener">' + escapeHtml(a.href) + '</a>';
+      return 'ip route ' + label.padEnd(13) + ROUTE_PREFIX[label].padEnd(10) + target;
+    });
+  return '! --- Contact Information ---\n\n' + lines.join('\n');
+}
+
+function uptime() {
+  const mins = Math.floor((Date.now() - LOADED_AT) / 60000);
+  const h = Math.floor(mins / 60);
+  const m = mins % 60;
+  const plural = (n, unit) => n + ' ' + unit + (n === 1 ? '' : 's');
+  return h ? plural(h, 'hour') + ', ' + plural(m, 'minute') : plural(m, 'minute');
+}
+
+function showVersion() {
+  const compiled = new Date().toLocaleDateString('en-US', { weekday: 'short', year: 'numeric', month: 'short', day: 'numeric' });
+  return escapeHtml(
+    'Portfolio Repository System\n' +
+    'Copyright (c) Jakob Jonasson. All rights reserved.\n\n' +
+    'Jonasson Software, Version 1.0.5\n' +
+    'Compiled ' + compiled + '\n\n' +
+    'ROM: System Bootstrap, Version 1.0\n' +
+    'BOOTLDR: PRS Boot Loader, Version 1.0\n\n' +
+    HOSTNAME + ' uptime is ' + uptime() + '\n' +
+    'System returned to ROM by power-on\n' +
+    'System image file is "flash:jakobs-portfolio.bin"\n\n' +
+    'Configuration register is 0x2102');
+}
+
+function showRunCfg() {
+  const body = [showAbout(), showResume(), showSkills(), showProjects(), showContact()].join('\n!\n');
+  const tmp = document.createElement('div');
+  tmp.innerHTML = body;
+  return 'Building configuration...\n\n' +
+    'Current configuration : ' + tmp.textContent.length.toLocaleString('en-US') + ' bytes\n' +
+    '!\nversion 1.0.5\n!\nhostname ' + HOSTNAME + '\n!\n' + body + '\n!\nend';
 }
 
 // Byte count is flavor text taken from the current resume.pdf; if the file is
@@ -1031,43 +1002,9 @@ function copyResume() {
     '!'.repeat(isNarrow() ? 30 : 50) + '\n' +
     '[OK - ' + n + ' bytes]\n\n' +
     n + ' bytes copied in 0.412 secs\n\n' +
-    'Or open it directly: <a href="/resume.pdf" target="_blank" rel="noopener" style="color:#fff">/resume.pdf</a>';
+    'Or open it directly: <a class="cli-link" href="/resume.pdf" target="_blank" rel="noopener">/resume.pdf</a>';
 }
 
-function showContact() {
-  return '! --- Contact Information ---\n\n' +
-    'ip route Phone        192.168.1.1 <a href="tel:+17016101058" style="color:#fff">701-610-1058</a>\n' +
-    'ip route Email        25.0.5.87 jakob@jonasson.us\n' +
-    'ip route GitHub       22.0.0.0  <a href="https://github.com/jakobjonasson" target="_blank" rel="noopener" style="color:#fff">https://github.com/jakobjonasson</a>\n' +
-    'ip route LinkedIn     10.0.0.0  <a href="https://www.linkedin.com/in/jakob-jonasson/" target="_blank" rel="noopener" style="color:#fff">https://www.linkedin.com/in/jakob-jonasson/</a>';
-}
-
-function showRunCfg() {
-  return 'Building configuration...\n\nCurrent configuration : 420 bytes\n!\nversion 1.0.5\n!\nhostname ' + HOSTNAME + '\n!\n' +
-    showAbout() + '\n!\n' + showResume() + '\n!\n' + showSkills() + '\n!\n' + showProjects() + '\n!\n' + showContact() + '\n!\nend';
-}
-
-function showShowHelp() {
-  return '  about               Display bio and summary\n' +
-    '  resume              Display work experience and education\n' +
-    '  skills              Display technical skills\n' +
-    '  projects            Display project portfolio\n' +
-    '  contact             Display contact information\n' +
-    '  version             System hardware and software status\n' +
-    '  running-config      Display current running configuration';
-}
-function showUserHelp() {
-  return '  enable              Turn on privileged commands\n' +
-    '  help                Description of the interactive help system\n' +
-    '  show version        System hardware and software status';
-}
-function showEnableHelp() {
-  return '  show                Show running system information\n' +
-    '  copy                Copy flash:resume.pdf to the local disk\n' +
-    '  disable             Return to user mode\n' +
-    '  clear               Clear the terminal\n' +
-    '  help                Description of the interactive help system';
-}
 function showHelpText() {
   return 'Help may be requested at any point in a command by entering\n' +
     'a question mark \'?\'. If nothing matches, the help list will\n' +
@@ -1081,114 +1018,205 @@ function showHelpText() {
     '   input (e.g. \'sh?\').';
 }
 
-function handleCmd(raw) {
-  if (cliMode === 'login') {
-    cliUser = raw.trim() || 'guest';
-    cliMode = 'user';
-    cliPrint('Type <span class="bright">enable</span> to enter privileged mode, or <span class="bright">?</span> for help.\n');
-    cliUpdatePrompt();
-    return;
-  }
-  const c = raw.trim().toLowerCase();
-  if (!c) return;
-  if (c === '?') { cliPrint(cliMode === 'user' ? showUserHelp() : showEnableHelp()); return; }
-  if (c === 'help') { cliPrint(showHelpText()); return; }
+// ════════════════════════════════════
+// Terminal: command table and parser
+// ════════════════════════════════════
 
-  if (cliMode === 'user') {
-    if (c === 'enable' || c === 'en') { cliMode = 'enable'; cliUpdatePrompt(); return; }
-    if (c === 'show version' || c === 'sh ver') { cliPrint(showVersion()); return; }
-    if (c === 'show ?' || c === 'sh ?') { cliPrint('  version             System hardware and software status'); return; }
-    cliPrint('% Unknown command or insufficient privilege level. Type \'?\' for help.');
-    return;
-  }
+let cliMode = 'login';
+let cliUser = '';
 
-  if (cliMode === 'enable') {
-    if (c === 'disable' || c === 'dis') { cliMode = 'user'; cliUpdatePrompt(); return; }
-    if (c === 'clear' || c === 'cl') { cliOutput.innerHTML = ''; return; }
-    if (c === 'show ?' || c === 'sh ?') { cliPrint(showShowHelp()); return; }
-    if (c === 'show about' || c === 'sh about' || c === 'sh ab') { cliPrint(showAbout()); return; }
-    if (c === 'show resume' || c === 'sh resume' || c === 'sh res') { cliPrint(showResume()); return; }
-    if (c === 'show skills' || c === 'sh skills' || c === 'sh sk') { cliPrint(showSkills()); return; }
-    if (c === 'show projects' || c === 'sh projects' || c === 'sh proj') { cliPrint(showProjects()); return; }
-    if (c === 'show contact' || c === 'sh contact' || c === 'sh con') { cliPrint(showContact()); return; }
-    if (c === 'show version' || c === 'sh ver') { cliPrint(showVersion()); return; }
-    if (c === 'show running-config' || c === 'sh run') { cliPrint(showRunCfg()); return; }
-    if (c === 'copy flash:resume.pdf' || c === 'copy resume' || c === 'download resume') { cliPrint(copyResume()); return; }
-    cliPrint('% Invalid input detected at \'^\' marker.\n\n% Type \'?\' for a list of available commands.');
-    return;
-  }
+function setMode(m) { cliMode = m; cliPromptEl.textContent = cliGetPrompt(); }
+
+function cliGetPrompt() {
+  if (cliMode === 'login') return 'Username: ';
+  return cliUser + '@' + HOSTNAME + (cliMode === 'user' ? '>' : '#');
 }
 
-function getCompletions() {
-  if (cliMode === 'user') return ['enable','help','show version'];
-  if (cliMode === 'enable') return ['show about','show resume','show skills','show projects','show contact','show version','show running-config','copy flash:resume.pdf','disable','clear','help'];
-  return [];
+// Help text for a command's first word, shown by '?'.
+const TOP_HELP = {
+  enable: 'Turn on privileged commands',
+  disable: 'Return to user mode',
+  show: 'Show running system information',
+  copy: 'Copy flash:resume.pdf to the local disk',
+  clear: 'Clear the terminal',
+  help: 'Description of the interactive help system',
+};
+
+const SHOW_CMDS = [
+  ['about', 'Display bio and summary', showAbout],
+  ['resume', 'Display work experience and education', showResume],
+  ['skills', 'Display technical skills', showSkills],
+  ['projects', 'Display project portfolio', showProjects],
+  ['contact', 'Display contact information', showContact],
+  ['version', 'System hardware and software status', showVersion],
+  ['running-config', 'Display current running configuration', showRunCfg],
+];
+
+// Each word may be abbreviated to any unique prefix, as on IOS ('sh run').
+// Hidden entries are friendly aliases: they run but never appear in help.
+const COMMANDS = {
+  user: [
+    { words: ['enable'], run: () => setMode('enable') },
+    { words: ['help'], run: showHelpText },
+    { words: ['show', 'version'], help: 'System hardware and software status', run: showVersion },
+  ],
+  enable: [
+    ...SHOW_CMDS.map(([word, help, run]) => ({ words: ['show', word], help, run })),
+    { words: ['copy', 'flash:resume.pdf'], help: 'Copy resume.pdf to the local disk', run: copyResume },
+    { words: ['copy', 'resume'], hidden: true, run: copyResume },
+    { words: ['download', 'resume'], hidden: true, run: copyResume },
+    { words: ['disable'], run: () => setMode('user') },
+    { words: ['clear'], run: () => { cliOutput.innerHTML = ''; } },
+    { words: ['help'], run: showHelpText },
+  ],
+};
+
+const prefixMatch = (tokens, cmd) => tokens.every((t, i) => i < cmd.words.length && cmd.words[i].startsWith(t));
+
+// Words that can follow `tokens`, filtered by an optional partial word.
+function nextWords(tokens, partial = '') {
+  const seen = new Map();
+  for (const cmd of COMMANDS[cliMode]) {
+    if (cmd.hidden || cmd.words.length <= tokens.length || !prefixMatch(tokens, cmd)) continue;
+    const word = cmd.words[tokens.length];
+    if (!word.startsWith(partial) || seen.has(word)) continue;
+    const last = tokens.length === cmd.words.length - 1;
+    seen.set(word, tokens.length === 0 ? TOP_HELP[word] || '' : last ? cmd.help || '' : '');
+  }
+  return seen;
+}
+
+function tokenize(raw) {
+  return [...raw.matchAll(/\S+/g)].map(m => ({ t: m[0].toLowerCase(), at: m.index }));
+}
+
+// Returns the text to leave in the input afterwards (IOS refills after '?').
+function handleCmd(raw) {
+  if (cliMode === 'login') {
+    cliUser = raw.trim().split(/\s+/)[0].slice(0, 32) || 'guest';
+    setMode('user');
+    cliPrint('Type <span class="bright">enable</span> to enter privileged mode, or <span class="bright">?</span> for help.\n');
+    return '';
+  }
+
+  // '?' help: "show ?" lists arguments, "sh?" lists matching words.
+  if (raw.trimEnd().endsWith('?')) {
+    const body = raw.trimEnd().slice(0, -1);
+    const toks = tokenize(body).map(x => x.t);
+    const partial = /\s$/.test(body) || !body.trim() ? '' : toks.pop();
+    const words = nextWords(toks, partial);
+    const complete = partial === '' && toks.length > 0 &&
+      COMMANDS[cliMode].some(c => !c.hidden && c.words.length === toks.length && prefixMatch(toks, c));
+    if (!words.size && !complete) {
+      cliPrint('% Unrecognized command');
+    } else if (partial !== '') {
+      cliPrint(escapeHtml([...words.keys()].join('  ')));
+    } else {
+      const lines = [...words].map(([w, h]) => '  ' + w.padEnd(20) + h);
+      if (complete) lines.push('  <cr>');
+      cliPrint(escapeHtml(lines.join('\n')));
+    }
+    return body;
+  }
+
+  const toks = tokenize(raw);
+  if (!toks.length) return '';
+  const words = toks.map(x => x.t);
+
+  const fits = list => list.filter(c => prefixMatch(words, c));
+  const visible = fits(COMMANDS[cliMode].filter(c => !c.hidden));
+  const candidates = visible.length ? visible : fits(COMMANDS[cliMode].filter(c => c.hidden));
+  const exact = candidates.filter(c => c.words.length === words.length);
+  // 'c' is ambiguous (clear, copy) even though only 'clear' is one word long.
+  const ambiguous = words.some((w, i) => {
+    const opts = new Set(candidates.filter(c => c.words.length > i).map(c => c.words[i]));
+    return opts.size > 1 && !opts.has(w);
+  });
+
+  if (ambiguous || exact.length > 1) {
+    cliPrint('% Ambiguous command:  "' + escapeHtml(raw.trim()) + '"');
+  } else if (exact.length === 1) {
+    const out = exact[0].run();
+    if (out) cliPrint(out);
+  } else if (candidates.length) {
+    cliPrint('% Incomplete command.');
+  } else if (cliMode === 'user' && COMMANDS.enable.some(c => prefixMatch(words, c))) {
+    cliPrint('% Privileged command. Type <span class="bright">enable</span> first.');
+  } else {
+    // Point the marker at the first word nothing accepts.
+    let bad = 0;
+    while (bad < words.length && COMMANDS[cliMode].some(c => prefixMatch(words.slice(0, bad + 1), c))) bad++;
+    const col = cliGetPrompt().length + toks[Math.min(bad, toks.length - 1)].at;
+    cliPrint(' '.repeat(col) + '^\n% Invalid input detected at \'^\' marker.\n\n% Type \'?\' for a list of available commands.');
+  }
+  return '';
+}
+
+// IOS-style completion: finish the current word if it is unique, otherwise
+// extend it to the longest prefix the candidates share.
+function complete(value) {
+  const [, before, partial] = value.match(/^(.*?)(\S*)$/);
+  const words = [...nextWords(tokenize(before).map(x => x.t), partial.toLowerCase()).keys()];
+  if (!words.length) return value;
+  if (words.length === 1) return before + words[0] + ' ';
+  let common = words[0];
+  for (const w of words) while (!w.startsWith(common)) common = common.slice(0, -1);
+  return before + (common.length > partial.length ? common : partial);
+}
+
+function cliPrint(html) { mkBlock(html, cliOutput); cliOutput.scrollTop = cliOutput.scrollHeight; }
+
+function cliPromptLine(cmd) {
+  const d = document.createElement('div');
+  d.className = 'output-block';
+  d.innerHTML = '<div class="prompt-line">' + escapeHtml(cliGetPrompt() + cmd) + '</div>';
+  cliOutput.appendChild(d);
 }
 
 async function cliBoot() {
   cliInput.disabled = true;
-  const print = t => { mkBlock(t, cliOutput); cliOutput.scrollTop = cliOutput.scrollHeight; };
-
-  const disarmSkip = armBootSkip(cliEl);
-
-  print('\nSystem Bootstrap, Version 1.0');
-  await bootSleep(80);
-  print('Copyright (c) Jakob Jonasson\n');
-  await bootSleep(100);
-  await spinLine('Initializing memory... ', 500, cliOutput, bootSkipped);
-  await bootSleep(120);
-  print(bootLoadingLine());
-  await progressBar(750, cliOutput, bootBarWidth(), bootSkipped);
-  await bootSleep(150);
-  print(bootBanner());
-  await bootSleep(200);
-  print('\nPortfolio ready.\n');
-  disarmSkip();
+  await runBoot(cliOutput, cliEl);
   cliInput.disabled = false;
   cliInput.focus();
 }
 
+const cmdHistory = [];
+let histIdx = -1;
+
 cliInput.addEventListener('keydown', e => {
   if (e.key === 'Enter') {
-    const v = cliInput.value;
-    if (v.trim()) cmdHistory.unshift(v);
+    const raw = cliInput.value.trimEnd();
+    if (raw.trim()) cmdHistory.unshift(raw);
     histIdx = -1;
-    cliPromptLine(v.trim());
-    handleCmd(v);
-    cliInput.value = '';
+    cliPromptLine(raw);
+    cliInput.value = handleCmd(raw);
     cliOutput.scrollTop = cliOutput.scrollHeight;
-    tabMatches = []; tabIdx = -1;
   } else if (e.key === 'ArrowUp') {
     e.preventDefault();
-    if (histIdx < cmdHistory.length - 1) { histIdx++; cliInput.value = cmdHistory[histIdx]; }
+    if (histIdx < cmdHistory.length - 1) cliInput.value = cmdHistory[++histIdx];
   } else if (e.key === 'ArrowDown') {
     e.preventDefault();
-    if (histIdx > 0) { histIdx--; cliInput.value = cmdHistory[histIdx]; }
-    else { histIdx = -1; cliInput.value = ''; }
-  } else if (e.key === 'Tab') {
+    histIdx = Math.max(histIdx - 1, -1);
+    cliInput.value = histIdx >= 0 ? cmdHistory[histIdx] : '';
+  } else if (e.key === 'Tab' && cliMode !== 'login') {
     e.preventDefault();
-    const val = cliInput.value.toLowerCase().trim();
-    const comp = getCompletions();
-    if (!tabMatches.length || val !== tabOrig) {
-      tabOrig = val;
-      tabMatches = comp.filter(c => c.startsWith(val));
-      tabIdx = 0;
-    } else {
-      tabIdx = (tabIdx + 1) % tabMatches.length;
-    }
-    if (tabMatches.length) cliInput.value = tabMatches[tabIdx];
-  } else {
-    tabMatches = []; tabIdx = -1;
+    cliInput.value = complete(cliInput.value);
   }
 });
 
+// Clicking anywhere in the terminal returns focus to the prompt, except on
+// links or while the visitor is selecting output text to copy.
 document.addEventListener('click', e => {
-  if (cliEl.classList.contains('active') && !e.target.closest('.term-topbar')) {
-    cliInput.focus();
-  }
+  if (view !== 'terminal' || e.target.closest('a')) return;
+  if (!window.getSelection().isCollapsed) return;
+  cliInput.focus();
 });
 
-cliUpdatePrompt();
+// ════════════════════════════════════
+// Start
+// ════════════════════════════════════
+
+setView(viewFromHash(), false);
 </script>
 
 <!-- Cloudflare Web Analytics - free, cookieless, no consent banner needed.
