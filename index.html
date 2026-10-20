@@ -117,8 +117,6 @@
     border-bottom: 1px solid var(--line);
   }
 
-  .term-topbar-links { display: flex; gap: 2ch; }
-
   .term-topbar a,
   .gui-topbar-links a {
     color: var(--dim);
@@ -171,18 +169,6 @@
   .dim { color: var(--dim); }
   .bright { color: var(--accent); font-weight: 700; }
   .cli-link { color: var(--accent); }
-
-  /* ── Landing mode links ── */
-
-  .mode-link {
-    color: var(--fg);
-    text-decoration: none;
-  }
-
-  .mode-link:hover {
-    color: var(--accent);
-    text-decoration: underline;
-  }
 
   /* ── Portfolio view ── */
 
@@ -409,8 +395,6 @@
     /* Stack the label so unbreakable URLs get the full column width */
     .contact-label { display: block; width: auto; margin-bottom: 2px; }
     .contact-row { margin-bottom: 14px; overflow-wrap: anywhere; }
-    /* No hover on touch, so give the mode links real tap targets */
-    .mode-link { display: inline-block; padding: 5px 0; }
   }
 
   /* 36-column boot art needs ~8px per char; keep it fitting on a 320px screen */
@@ -419,42 +403,26 @@
   }
 </style>
 
-<!-- The boot sequence and terminal are drawn by JS, so without it the landing
-     page would be blank. The portfolio markup is static, so just show it. -->
+<!-- The terminal is drawn by JS, so without it there is nothing to link to. -->
 <noscript>
   <style>
-    #landing { display: none; }
-    #gui-view { display: block; }
-    #gui-back { display: none; }
+    #gui-terminal { display: none; }
   </style>
 </noscript>
 </head>
 <body>
 
-<!-- ═══════════════════ Landing: boot terminal ═══════════════════ -->
-
-<div class="term-wrap" id="landing">
-  <div class="term-topbar">
-    <span>jjonasson.dev</span>
-    <span class="term-topbar-links">
-      <a href="mailto:jakob@jonasson.us">email</a>
-      <a href="https://github.com/jakobjonasson" target="_blank" rel="noopener">github</a>
-      <a href="https://www.linkedin.com/in/jakob-jonasson/" target="_blank" rel="noopener">linkedin</a>
-    </span>
-  </div>
-  <div class="term-body" id="boot-output"></div>
-</div>
-
-<!-- ═══════════════════ Portfolio view ═══════════════════
+<!-- ═══════════════════ Portfolio view (default) ═══════════════════
      This markup is the single source of truth for the resume content.
-     The terminal's show commands read it from here, so edit it only here. -->
+     The terminal's show commands read it from here, so edit it only here.
+     It starts active so it paints without waiting for the script. -->
 
-<div class="gui-view" id="gui-view">
+<div class="gui-view active" id="gui-view">
   <nav class="gui-topbar">
     <span class="gui-topbar-name">Jakob Jonasson</span>
     <div class="gui-topbar-links">
       <a href="/resume.pdf" target="_blank" rel="noopener">resume</a>
-      <a href="/" id="gui-back">&lt;- back</a>
+      <a href="#terminal" id="gui-terminal">terminal</a>
     </div>
   </nav>
 
@@ -607,7 +575,7 @@
   <div class="term-wrap">
     <div class="term-topbar">
       <span>jjonasson.dev — terminal</span>
-      <a href="/" id="cli-back">&lt;- back</a>
+      <a href="/" id="cli-back">&lt;- portfolio</a>
     </div>
     <div class="term-body" id="cli-output"></div>
     <div class="term-input-row">
@@ -687,7 +655,7 @@ async function progressBar(ms, parent, width, skip) {
 }
 
 // ════════════════════════════════════
-// Boot sequence (shared by landing and terminal)
+// Boot sequence (shown when the terminal opens)
 // ════════════════════════════════════
 
 // Width-based rather than user-agent based: this also covers a narrow desktop
@@ -725,7 +693,7 @@ const bootSkipped = () => bootSkip;
 const bootSleep = ms => (bootSkip ? Promise.resolve() : sleep(ms));
 
 // Returns a disarm function; call it once the boot has finished so these
-// listeners do not swallow a click meant for the menu.
+// listeners stop firing on every click and keypress in the terminal.
 function armBootSkip(el) {
   if (bootSkip) return () => {};
   const trip = () => { bootSkip = true; disarm(); };
@@ -769,19 +737,15 @@ async function runBoot(out, root) {
 // Views
 // ════════════════════════════════════
 
-const landingEl = $('#landing');
 const guiEl = $('#gui-view');
 const cliEl = $('#cli-view');
-const bootOut = $('#boot-output');
 
 let view = null;
-let landingBooted = false;
-let menuReady = false;
 let cliBooted = false;
 
-const viewFromHash = () =>
-  location.hash === '#portfolio' ? 'portfolio' :
-  location.hash === '#terminal' ? 'terminal' : 'landing';
+// The portfolio is the default, so any other hash (old #portfolio links, or a
+// section anchor like #projects) lands there too.
+const viewFromHash = () => (location.hash === '#terminal' ? 'terminal' : 'portfolio');
 
 // `push` is false when responding to the URL (initial load, back/forward):
 // pushing there would duplicate entries and wipe the forward history.
@@ -789,19 +753,16 @@ function setView(name, push = true) {
   if (name === view) return;
   view = name;
 
-  landingEl.style.display = name === 'landing' ? '' : 'none';
   guiEl.classList.toggle('active', name === 'portfolio');
   cliEl.classList.toggle('active', name === 'terminal');
   document.body.style.overflow = name === 'terminal' ? 'hidden' : '';
 
   if (push) {
-    history.pushState(null, '', name === 'landing' ? location.pathname + location.search : '#' + name);
+    history.pushState(null, '', name === 'portfolio' ? location.pathname + location.search : '#' + name);
   }
 
-  if (name === 'landing' && !landingBooted) {
-    landingBooted = true;
-    landingBoot();
-  } else if (name === 'portfolio') {
+  // Only reset scroll on a click: on load the browser should honor #anchors.
+  if (name === 'portfolio' && push) {
     window.scrollTo(0, 0);
   } else if (name === 'terminal') {
     if (!cliBooted) {
@@ -813,44 +774,8 @@ function setView(name, push = true) {
   }
 }
 
-async function landingBoot() {
-  await runBoot(bootOut, landingEl);
-  await bootSleep(100);
-
-  // Real hrefs so the links are focusable, announced as links, and work
-  // without JS; the click handler below takes over so pushState owns history.
-  const gui = '<a class="mode-link" href="#portfolio" data-view="portfolio">[1]  Portfolio</a>';
-  const cli = '<a class="mode-link" href="#terminal" data-view="terminal">[2]  Terminal</a>';
-  const guiNote = '<span class="dim">scrollable overview</span>';
-  const cliNote = '<span class="dim">interactive CLI (try: sh run)</span>';
-
-  // On a narrow screen the descriptions go on their own line instead of
-  // trailing the link, which would wrap mid-word.
-  mkBlock('Select interface:\n\n' + (isNarrow()
-    ? '  ' + gui + '\n       ' + guiNote + '\n  ' + cli + '\n       ' + cliNote + '\n'
-    : '  ' + gui + '   ' + guiNote + '\n  ' + cli + '    ' + cliNote + '\n'), bootOut);
-  bootOut.scrollTop = bootOut.scrollHeight;
-  menuReady = true;
-}
-
-bootOut.addEventListener('click', e => {
-  const link = e.target.closest('.mode-link');
-  if (!link) return;
-  e.preventDefault();
-  setView(link.dataset.view);
-});
-
-// Press 1 or 2 on the landing menu. One listener for the page's lifetime,
-// gated on the current view, so typing in the terminal never triggers it.
-document.addEventListener('keydown', e => {
-  if (view !== 'landing' || !menuReady || e.metaKey || e.ctrlKey || e.altKey) return;
-  if (e.key === '1') setView('portfolio');
-  else if (e.key === '2') setView('terminal');
-});
-
-for (const id of ['#gui-back', '#cli-back']) {
-  $(id).addEventListener('click', e => { e.preventDefault(); setView('landing'); });
-}
+$('#gui-terminal').addEventListener('click', e => { e.preventDefault(); setView('terminal'); });
+$('#cli-back').addEventListener('click', e => { e.preventDefault(); setView('portfolio'); });
 
 window.addEventListener('popstate', () => setView(viewFromHash(), false));
 
