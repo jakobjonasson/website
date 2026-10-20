@@ -331,6 +331,14 @@
   .proj-meta { margin-bottom: 10px; font-size: 11px; color: var(--dim); }
   .proj-desc { font-size: 13px; line-height: 1.6; color: var(--text); }
 
+  .proj-img {
+    display: block;
+    width: 100%;
+    height: auto;
+    margin-top: 12px;
+    border: 1px solid var(--line);
+  }
+
   .proj-tags { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 10px; }
 
   .proj-tag {
@@ -339,6 +347,16 @@
     color: var(--dim);
     border: 1px solid var(--line-2);
   }
+
+  .proj-links { margin-top: 10px; font-size: 12px; }
+
+  .proj-link {
+    color: var(--text);
+    text-underline-offset: 3px;
+    transition: color 0.15s;
+  }
+
+  .proj-link:hover { color: var(--fg); }
 
   /* Contact */
 
@@ -460,79 +478,25 @@
       </div>
     </section>
 
-    <section class="gui-section" id="experience">
-      <h2 class="sec-title">Experience</h2>
-      <div class="exp-item current">
-        <p class="exp-role">Network Engineer</p>
-        <p class="exp-co">Twotrees Technologies — Grand Forks, ND</p>
-        <p class="exp-dates">Oct 2024 – Present</p>
-        <ul class="exp-list">
-          <li>Sole escalation engineer for a top four U.S. turkey processor supporting their internal IT team for all level 3 escalations and network work as the client grew from 10 to 18 sites across six states in three months, nearly doubling their footprint</li>
-          <li>Planned and led network migrations across eight facilities the same client acquired, sole lead engineer on the first three sites, then lead of a two-engineer team on a four-site cutover roughly three times its size, completed in a single Friday–Monday window during four days of facility downtime</li>
-          <li>Replaced legacy SD-WAN with next-generation firewalls and established site-to-site IPsec tunnels integrating each acquired facility into the client's multi-site WAN</li>
-          <li>Operate and extend a 400+ device Cisco campus environment across Catalyst 9500 StackWise Virtual cores, mixed-generation Catalyst access switching, HSRP-redundant distribution carrying OT networks, and 9800 WLC pairs in HA SSO with guest anchor</li>
-          <li>Design and support wireless across Cisco 9800 and Ruckus platforms for plant-floor, warehouse, and office environments</li>
-          <li>Manage SonicWall, Cisco, and Meraki edge across a 200+ firewall fleet, including coordinated zero-day mitigation and Duo MFA with Entra ID SAML SSO for AnyConnect and SonicWall SSLVPN remote access</li>
-          <li>Led CJIS compliance initiatives for county jail and 911 center clients. Met directly with stakeholders to assess gaps, scoped remediation, and implemented solutions end to end</li>
-          <li>Scope and design network refreshes across the firm's client base, assessing current-state environments and producing sized equipment recommendations and bills of materials across Cisco Catalyst, Ruckus, SonicWall, Aruba, and Meraki</li>
-          <li>Deployed PRTG network monitoring, created monitors, automated alerts, and built a status dashboard integrated with internal digital signage</li>
-        </ul>
-      </div>
-      <div class="exp-item">
-        <p class="exp-role">Data Center Technician</p>
-        <p class="exp-co">Core Scientific — Grand Forks, ND</p>
-        <p class="exp-dates">Dec 2023 – Oct 2024</p>
-        <ul class="exp-list">
-          <li>Installed, cabled, and maintained servers and networking equipment in a large-scale data center</li>
-          <li>Led a team of 8 technicians to deploy 7,000+ servers across 4 weeks, finishing the weekly quota days ahead of schedule every week</li>
-          <li>Wrote a multi-threaded Python script that scanned 1,000 IPs at a time to find servers missing from asset tracking</li>
-        </ul>
-      </div>
-    </section>
-
-    <section class="gui-section" id="education">
-      <h2 class="sec-title">Education</h2>
-      <div class="exp-item">
-        <p class="exp-role">Bachelor of Science, Cloud and Network Engineering</p>
-        <p class="exp-co">Western Governors University</p>
-        <p class="exp-dates">July 2026</p>
-        <ul class="exp-list">
-          <li>Coursework in networking, cloud architecture, virtualization, and security</li>
-        </ul>
-      </div>
-    </section>
-
-    <section class="gui-section" id="skills">
-      <h2 class="sec-title">Technical Skills</h2>
-      <div class="skills-grid">
-        <div class="skill-box">
-          <p class="skill-cat">Networking</p>
-          <p class="skill-list">Cisco IOS-XE, OSPF, BGP, FHRP, 802.1X/RADIUS, VLAN Segmentation, VPN/IPsec, SD-WAN, LAN/WAN, Meraki, Aruba</p>
-        </div>
-        <div class="skill-box">
-          <p class="skill-cat">Security</p>
-          <p class="skill-list">SonicWall, Datto EDR/AV, Duo MFA/SAML SSO, NAC, incident response, vulnerability and firmware lifecycle management</p>
-        </div>
-        <div class="skill-box">
-          <p class="skill-cat">Automation &amp; Cloud</p>
-          <p class="skill-list">Python, AWS (VPC, Security Groups, IAM, Lambda), Git</p>
-        </div>
-      </div>
-    </section>
-
     <section class="gui-section" id="projects">
       <h2 class="sec-title">Projects</h2>
       <div class="proj">
-        <p class="proj-title">Eight-Site Acquisition Separation &amp; WAN Integration</p>
-        <p class="proj-meta">Poultry Processing Client · 2025–2026</p>
-        <p class="proj-desc">Lead engineer on a client's acquisition of eight poultry production facilities — breeder, hatchery, feed-mill, and processing sites — from one of the largest privately held companies in the U.S. Separated each site from the parent network and integrated it into the client's WAN: legacy SD-WAN replaced with next-generation firewalls and site-to-site IPsec tunnels, Catalyst 9500 StackWise Virtual cores, HSRP-redundant distribution carrying OT networks, and 9800 WLC pairs in HA SSO. Sole lead engineer on the first three sites, then lead of a two-engineer team on a four-site cutover roughly three times its size, completed in a single Friday–Monday window during four days of facility downtime.</p>
+        <p class="proj-title">Tsunami: Network Automation for Windows</p>
+        <p class="proj-meta">Open Source · Oct 2026 – Present · v0.5.0</p>
+        <p class="proj-desc">An installable Windows desktop tool (no WSL) that pushes Jinja-templated configuration to up to 200 Cisco IOS/IOS-XE and HPE Aruba AOS-S/AOS-CX devices over SSH or serial console. Every change is diffed against the running config, then pushed with canary rollout, batching, pre-change backups, and rollback, and changes to customer devices require operator approval in the GUI. A built-in MCP server lets Claude read inventory, draft plays, and run read-only checks without ever seeing credentials: the relay holds no secrets, and every outbound string passes through a single redactor, verified by a dedicated secret-leak test suite. Confirmed on a Catalyst 2960-X, ISR C1101-4P, Aruba 2530, and IOL in CML, with about 2,470 unit and 170 GUI tests running in GitHub Actions CI.</p>
+        <!-- TODO: save the GUI screenshot as Website/tsunami.png, then uncomment.
+        <img class="proj-img" src="/tsunami.png" alt="Tsunami desktop app" loading="lazy">
+        -->
         <div class="proj-tags">
-          <span class="proj-tag">Cisco 9500 SVL</span>
-          <span class="proj-tag">9800 WLC HA SSO</span>
-          <span class="proj-tag">HSRP</span>
-          <span class="proj-tag">IPsec WAN</span>
-          <span class="proj-tag">8 Facilities</span>
+          <span class="proj-tag">Python</span>
+          <span class="proj-tag">Netmiko</span>
+          <span class="proj-tag">MCP</span>
+          <span class="proj-tag">Jinja</span>
+          <span class="proj-tag">IOS-XE</span>
+          <span class="proj-tag">Aruba AOS-S/CX</span>
+          <span class="proj-tag">CI/CD</span>
         </div>
+        <p class="proj-links"><a class="proj-link" href="https://github.com/jakobjonasson/tsunami" target="_blank" rel="noopener">GitHub</a></p>
       </div>
       <div class="proj">
         <p class="proj-title">Hierarchical BGP over IPsec</p>
@@ -564,6 +528,66 @@
           <span class="proj-tag">IPsec</span>
           <span class="proj-tag">Network Segmentation</span>
         </div>
+      </div>
+    </section>
+
+    <section class="gui-section" id="experience">
+      <h2 class="sec-title">Experience</h2>
+      <div class="exp-item current">
+        <p class="exp-role">Network Engineer</p>
+        <p class="exp-co">Twotrees Technologies — Grand Forks, ND</p>
+        <p class="exp-dates">Oct 2024 – Present</p>
+        <ul class="exp-list">
+          <li>Sole escalation engineer for a top four U.S. turkey processor supporting their internal IT team for all level 3 escalations and network work as the client grew from 10 to 18 sites across six states in three months, nearly doubling their footprint</li>
+          <li>Planned and led network migrations across eight facilities the same client acquired, sole lead engineer on the first three sites, then lead of a two-engineer team on a four-site cutover roughly three times its size, completed in a single Friday–Monday window during four days of facility downtime</li>
+          <li>Replaced legacy SD-WAN with next-generation firewalls and established site-to-site IPsec tunnels integrating each acquired facility into the client's multi-site WAN</li>
+          <li>Operate and extend a 400+ device Cisco campus environment across Catalyst 9500 StackWise Virtual cores, mixed-generation Catalyst access switching, HSRP-redundant distribution carrying OT networks, and 9800 WLC pairs in HA SSO with guest anchor</li>
+          <li>Design and support wireless across Cisco 9800 and Ruckus platforms for plant-floor, warehouse, and office environments</li>
+          <li>Manage SonicWall, Cisco, and Meraki edge across a 200+ firewall fleet, including coordinated zero-day mitigation and Duo MFA with Entra ID SAML SSO for AnyConnect and SonicWall SSLVPN remote access</li>
+          <li>Led CJIS compliance initiatives for county jail and 911 center clients. Met directly with stakeholders to assess gaps, scoped remediation, and implemented solutions end to end</li>
+          <li>Scope and design network refreshes across the firm's client base, assessing current-state environments and producing sized equipment recommendations and bills of materials across Cisco Catalyst, Ruckus, SonicWall, Aruba, and Meraki</li>
+          <li>Deployed PRTG network monitoring, created monitors, automated alerts, and built a status dashboard integrated with internal digital signage</li>
+        </ul>
+      </div>
+      <div class="exp-item">
+        <p class="exp-role">Data Center Technician</p>
+        <p class="exp-co">Core Scientific — Grand Forks, ND</p>
+        <p class="exp-dates">Dec 2023 – Oct 2024</p>
+        <ul class="exp-list">
+          <li>Installed, cabled, and maintained servers and networking equipment in a large-scale data center</li>
+          <li>Led a team of 8 technicians to deploy 7,000+ servers across 4 weeks, finishing the weekly quota days ahead of schedule every week</li>
+          <li>Wrote a multi-threaded Python script that scanned 1,000 IPs at a time to find servers missing from asset tracking</li>
+        </ul>
+      </div>
+    </section>
+
+    <section class="gui-section" id="skills">
+      <h2 class="sec-title">Technical Skills</h2>
+      <div class="skills-grid">
+        <div class="skill-box">
+          <p class="skill-cat">Networking</p>
+          <p class="skill-list">Cisco IOS-XE, OSPF, BGP, FHRP, 802.1X/RADIUS, VLAN Segmentation, VPN/IPsec, SD-WAN, LAN/WAN, Meraki, Aruba</p>
+        </div>
+        <div class="skill-box">
+          <p class="skill-cat">Security</p>
+          <p class="skill-list">SonicWall, Datto EDR/AV, Duo MFA/SAML SSO, NAC, incident response, vulnerability and firmware lifecycle management</p>
+        </div>
+        <div class="skill-box">
+          <p class="skill-cat">Automation &amp; Cloud</p>
+          <p class="skill-list">Python, Netmiko, Jinja, MCP, GitHub Actions CI, AWS (VPC, Security Groups, IAM, Lambda), Git</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="gui-section" id="education">
+      <h2 class="sec-title">Education</h2>
+      <div class="exp-item">
+        <p class="exp-role">Bachelor of Science, Cloud and Network Engineering</p>
+        <p class="exp-co">Western Governors University</p>
+        <p class="exp-dates">July 2026</p>
+        <ul class="exp-list">
+          <li>Coursework in networking, cloud architecture, virtualization, and security</li>
+        </ul>
       </div>
     </section>
 
@@ -920,12 +944,15 @@ function showProjects() {
   const w = termCols();
   const stanzas = $$('#projects .proj').map((p, i) => [
     'interface Project0/' + i,
-    ' description ' + txt($('.proj-title', p)) + ' (' + txt($('.proj-meta', p)).replace(' · ', ', ') + ')',
+    ' description ' + txt($('.proj-title', p)) + ' (' + txt($('.proj-meta', p)).replaceAll(' · ', ', ') + ')',
     bullet(txt($('.proj-desc', p)), w),
     wrap('Tags: ' + $$('.proj-tag', p).map(txt).join(', '), w, ' ! ', ' !   '),
+  ].map(escapeHtml).concat(
+    // Links are already HTML, so they join after the escaping, as in showContact.
+    $$('.proj-link', p).map(a => ' ! ' + escapeHtml(txt(a)) + ': <a class="cli-link" href="' + escapeHtml(a.href) + '" target="_blank" rel="noopener">' + escapeHtml(a.href) + '</a>'),
     ' no shutdown',
-  ].join('\n'));
-  return escapeHtml('! --- Project Portfolio ---\n\n' + stanzas.join('\n\n'));
+  ).join('\n'));
+  return '! --- Project Portfolio ---\n\n' + stanzas.join('\n\n');
 }
 
 // Read the address back out of the DOM instead of holding it as a literal.
@@ -977,7 +1004,7 @@ function showVersion() {
 }
 
 function showRunCfg() {
-  const body = [showAbout(), showResume(), showSkills(), showProjects(), showContact()].join('\n!\n');
+  const body = [showAbout(), showProjects(), showResume(), showSkills(), showContact()].join('\n!\n');
   const tmp = document.createElement('div');
   tmp.innerHTML = body;
   return 'Building configuration...\n\n' +
@@ -1049,9 +1076,9 @@ const TOP_HELP = {
 
 const SHOW_CMDS = [
   ['about', 'Display bio and summary', showAbout],
+  ['projects', 'Display project portfolio', showProjects],
   ['resume', 'Display work experience and education', showResume],
   ['skills', 'Display technical skills', showSkills],
-  ['projects', 'Display project portfolio', showProjects],
   ['contact', 'Display contact information', showContact],
   ['version', 'System hardware and software status', showVersion],
   ['running-config', 'Display current running configuration', showRunCfg],
