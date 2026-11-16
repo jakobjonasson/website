@@ -227,9 +227,9 @@
   <section class="section" id="overview">
     <p class="sec-title">Project</p>
     <h1 class="name">Tsunami</h1>
-    <p class="role">Network Automation for Windows &middot; Open Source &middot; v0.5.0</p>
+    <p class="role">Network Automation for Windows &middot; Open Source (GPL v3) &middot; v0.7.2</p>
     <p class="lede">
-      A Windows desktop tool that pushes templated Cisco IOS/IOS-XE and HPE Aruba AOS-S/AOS-CX configuration to up to 200 devices over SSH or serial console. It has a GUI for people and a local MCP server for Claude. Claude can read inventory, draft plays, render templates and run read-only checks. It never sees credentials or secret values, and changes to customer devices need approval in the GUI.
+      A Windows desktop tool that replaces box-by-box CLI work with templated changes pushed to a fleet of Cisco IOS/IOS-XE and HPE Aruba AOS-S/AOS-CX switches, up to 200 per run, over SSH or serial console. Every change is shown as a diff against the live config before anything is sent. It has a GUI for people and a local MCP server for Claude. Claude can read inventory, draft plays, render templates and run read-only checks. It never sees credentials or secret values, and changes to customer devices need approval in the GUI.
     </p>
     <div class="tags">
       <span class="tag">Python</span>
@@ -244,26 +244,51 @@
     </div>
     <div class="links">
       <a class="link" href="https://github.com/jakobjonasson/tsunami" target="_blank" rel="noopener">GitHub</a>
+      <a class="link" href="https://github.com/jakobjonasson/tsunami/releases/latest" target="_blank" rel="noopener">Download installer</a>
     </div>
   </section>
 
   <section class="section" id="features">
-    <h2 class="sec-title">What it does</h2>
+    <h2 class="sec-title">Plays and runs</h2>
     <ul class="list">
       <li><b>Plays from a GUI.</b> Pick a play, pick targets, fill in prompts, preview the rendered config per device, then push.</li>
-      <li><b>Three play types on one engine:</b> initial (day-0), push (ad-hoc change), and baseline (a per-customer standard config).</li>
-      <li><b>Layered variables</b> across global, role, customer, site, device, play and prompt levels, with typed, validated prompts and the source of every value shown.</li>
-      <li><b>Safe fleet pushes:</b> every change is diffed against the running config, then pushed with a canary device, batches with a failure limit, pre-change backups, pre and post checks, and automatic rollback.</li>
-      <li><b>Drift reporting:</b> compare running config to a customer baseline without pushing anything.</li>
-      <li><b>SSH or serial console,</b> including day-0 setup over the console. Older switches that only offer SHA-1 SSH algorithms are reached through an automatic fallback.</li>
+      <li><b>Three play types on one engine:</b> initial (day-0 staging over console or SSH, optionally adding the new device to the inventory), push (changes), and baseline (a per-customer standard config).</li>
+      <li><b>Four run modes:</b> render (no connection), check (a diff against the running config, nothing sent), compliance (the lines a device is missing from its baseline, and the extra ones), and apply.</li>
+      <li><b>Layered variables</b> across global, role, customer, site, device, play and prompt levels, with the source of every value shown. Prompts are typed and validated, with dropdowns for a site, role, hardware model or saved login.</li>
+      <li><b>Safe fleet pushes:</b> apply runs a canary device first, then batches with a failure threshold, pre and post checks, a config backup, and rollback on failure or by a revert timer. The config is saved only when the checks pass.</li>
+      <li><b>Secrets as placeholders.</b> Templates name a secret, or one field of it (an SNMPv3 user has several). Real values exist only in memory during apply, and a secret that a play uses but nobody saved is reported before anything runs.</li>
+      <li><b>History of every job,</b> with masked renders and redacted diffs and output. Retry the failed devices, apply after a check, or run again. Show commands, discovery, drift checks and connection tests are recorded too.</li>
+      <li><b>Press and hold to reveal</b> a masked value, after entering the Tsunami password again. Each reveal is audited.</li>
+      <li><b>SSH or serial console,</b> including day-0 setup over the console, with a jump host per customer, site or device. Older switches that only offer SHA-1 SSH algorithms are reached through an automatic fallback.</li>
+    </ul>
+  </section>
+
+  <section class="section" id="inventory">
+    <h2 class="sec-title">Inventory and onboarding</h2>
+    <ul class="list">
+      <li><b>An inventory tree</b> of customers, sites and devices, with a default login per customer and per site, and logins on single devices.</li>
+      <li><b>CSV import,</b> or editing through the inventory menus. Hardware models missing from the built-in catalog can be added per workspace.</li>
+      <li><b>Site discovery over CDP and LLDP:</b> start from seed devices, add each one and follow its neighbors inside a scope. A separate check lists neighbors that are missing from the inventory.</li>
+      <li><b>Host keys trusted in bulk,</b> without logging in. A changed key is shown with both fingerprints and replaced only after confirmation.</li>
+      <li><b>A page per device:</b> the model, version and serial it reported, recent jobs, a connection test, its backups, and an SSH session in MobaXterm or OpenSSH.</li>
+    </ul>
+  </section>
+
+  <section class="section" id="backups">
+    <h2 class="sec-title">Backups and drift</h2>
+    <ul class="list">
+      <li><b>Backups from everyday work.</b> Every apply, discovery, drift check and restore saves the config. The viewer shows one backup or compares two, always through the redactor.</li>
+      <li><b>Back up and check for drift</b> on a site or a customer: a first backup for new devices, and for the rest a redacted diff since the newest backup.</li>
+      <li><b>Open in VS Code</b> opens a redacted copy, or VS Code's diff of two. The raw file is never opened.</li>
+      <li><b>Restore from backup</b> onto a replacement switch, over SSH or a console. The switch can be factory-new, in which case Tsunami answers its setup prompts. Rejected lines are listed, and the saved config is read back and compared with the backup. Restore is new in 0.7.0 and so far tested only against simulated devices.</li>
     </ul>
   </section>
 
   <section class="section" id="windows">
     <h2 class="sec-title">Built for Windows</h2>
     <ul class="list">
-      <li>Runs natively on Windows 10 and 11. No WSL, Docker, Linux VM, or separately installed Python.</li>
-      <li>Ships as a per-user installer that needs no admin rights.</li>
+      <li>Runs natively on Windows 10 and 11. No WSL, Docker, Linux VM, database, or separately installed Python, and no agent on the switches.</li>
+      <li>Ships as a per-user installer that needs no admin rights. Builds are not code-signed yet, so SmartScreen asks once.</li>
       <li>Device logins and secrets live only in Windows Credential Manager, encrypted under a Tsunami password. They never appear in YAML, git, logs, the job database, or MCP output.</li>
       <li>The GUI is laid out like VS Code, with a command palette, quick open, tabbed views, and a Problems panel. VS Code stays the editor for the YAML and Jinja workspace, which is a plain git repo.</li>
     </ul>
@@ -272,12 +297,15 @@
   <section class="section" id="mcp">
     <h2 class="sec-title">Claude, with guardrails</h2>
     <p class="para">
-      The MCP server exposes 18 tools in three tiers. Tier 0 touches only the workspace: reading inventory and plays, validating, rendering with secrets masked, and writing drafts. Tier 1 contacts devices read-only, for check-mode diffs, compliance reports, and allowlisted <code>show</code> commands. Tier 2 requests changes.
+      The MCP server's tools fall into three tiers. Tier 0 touches only the workspace: reading inventory, plays and job history, validating, rendering with secrets masked, and writing drafts. Tier 1 contacts devices read-only, for check-mode diffs, compliance reports, and allowlisted <code>show</code> commands on one device or many. Tier 2 requests changes. The policy sets the highest tier Claude may use, so a read-only setting stops every change request.
     </p>
     <ul class="list">
       <li><b>The relay holds no secrets.</b> <code>tsunami-mcp.exe</code> relays each tool call over a local named pipe to the GUI, which runs it only while Tsunami is unlocked.</li>
-      <li><b>One redactor</b> sits on every outbound string, verified by a dedicated secret-leak test suite.</li>
-      <li><b>Claude writes only drafts.</b> Drafts never reach a customer device until a person promotes them, and the policy file lives outside the workspace, so Claude can't edit its own permissions.</li>
+      <li><b>One redactor</b> sits on every outbound string, verified by a dedicated secret-leak test suite. Every call is audited.</li>
+      <li><b>Claude writes only drafts.</b> Drafts never reach a customer device until a person promotes them. The policy file lives outside the workspace and the server has no way to write it, so Claude can't edit its own permissions. It can read what it is allowed to do.</li>
+      <li><b>Show commands are allowlisted.</b> Claude can ask for another <code>show</code> command, and a person approves it in Settings.</li>
+      <li><b>Inventory edits are off by default.</b> When Settings allow them, Claude can add customers, sites, roles, devices and hardware models. Changing or removing a device is only proposed, and a person must trust a new device's host key before Claude can reach it.</li>
+      <li><b>Passwords stay with people.</b> A password prompt is typed by a person for one run. Claude can't supply one, and no tool reads a backup or restores one.</li>
       <li><b>Device output is untrusted.</b> It comes back in a field named <code>untrusted_device_output</code>, and the approval gate covers prompt injection from banners or descriptions.</li>
     </ul>
   </section>
@@ -285,15 +313,18 @@
   <section class="section" id="approval">
     <h2 class="sec-title">Approval flow</h2>
     <ol class="steps">
-      <li>Claude requests a run of an approved play against chosen targets.</li>
-      <li>Tsunami renders every target and runs a check-mode diff. Devices that would change are marked ready; if none would, nobody is asked to approve.</li>
+      <li>Claude requests a run of an approved play, never a draft, against chosen targets.</li>
+      <li>Tsunami renders every target and runs a check-mode diff. Devices that would change are marked ready. If none would, or if a device can't be checked, nobody is asked to approve.</li>
       <li>The GUI shows an approval card with the play, targets, prompts, and each device's masked render and diff.</li>
-      <li>A person approves or denies. Approval records their Windows username and the time.</li>
+      <li>A person approves or denies. Approval records their Windows username and the time, and a request nobody answers expires.</li>
       <li>The job runs through the normal pipeline, with canary, backups, and rollback.</li>
       <li>Each device is re-rendered at run time. If the play or the render changed since approval, that device fails instead of pushing content nobody approved.</li>
     </ol>
     <p class="para after-steps">
-      Lab customers are the exception: when the policy allows it, Claude can run plays against them without a click per run, so it can iterate against a CML lab.
+      Until a person approves, the job reports that nothing has been applied. Inventory changes that Claude proposes wait for the same kind of approval, on a card that shows each field's value before and after.
+    </p>
+    <p class="para">
+      Lab customers are the exception for runs: when the policy allows it, Claude can run plays against them without a click per run, so it can iterate against a CML lab. The job records that lab policy allowed it.
     </p>
   </section>
 
@@ -323,41 +354,42 @@
     <h2 class="sec-title">Tested platforms</h2>
     <div class="plat">
       <p class="plat-name">HPE Aruba AOS-S (ProCurve)</p>
-      <p class="plat-hw">2530-48G, YA.16.11</p>
-      <p class="plat-status">Confirmed working, including console day-0 (first-boot login, speed sense).</p>
+      <p class="plat-hw">2530, 2930F</p>
+      <p class="plat-status">Confirmed working in production, including console day-0 (first-boot login, speed sense).</p>
     </div>
     <div class="plat">
       <p class="plat-name">Cisco IOS</p>
-      <p class="plat-hw">Catalyst 2960-X</p>
-      <p class="plat-status">Confirmed working.</p>
+      <p class="plat-hw">Catalyst 2960-X, Catalyst 3560-CX</p>
+      <p class="plat-status">Confirmed working in production.</p>
     </div>
     <div class="plat">
       <p class="plat-name">Cisco IOS-XE</p>
-      <p class="plat-hw">ISR C1101-4P</p>
-      <p class="plat-status">Confirmed working.</p>
+      <p class="plat-hw">ISR C1100 series, Catalyst 9500, 9300, 9200, 3850, Catalyst 9800 WLC</p>
+      <p class="plat-status">Confirmed working in production.</p>
+    </div>
+    <div class="plat">
+      <p class="plat-name">HPE Aruba AOS-CX</p>
+      <p class="plat-hw">CX 6000</p>
+      <p class="plat-status">Confirmed working in production.</p>
     </div>
     <div class="plat">
       <p class="plat-name">Cisco IOS on Linux (IOL)</p>
       <p class="plat-hw">CML lab</p>
       <p class="plat-status">Confirmed working.</p>
     </div>
-    <div class="plat">
-      <p class="plat-name">HPE Aruba AOS-CX</p>
-      <p class="plat-hw">Not yet tested on hardware</p>
-      <p class="plat-status">Built and unit-tested against simulated devices. Checkpoint rollback is not yet verified on hardware.</p>
-    </div>
   </section>
 
   <section class="section" id="testing">
     <h2 class="sec-title">Testing and CI</h2>
     <p class="para">
-      About 2,470 unit and 170 GUI tests. Every push to main runs GitHub Actions on Windows: lint, unit and GUI tests, then a frozen build with self-tests, an MCP smoke test, and the installer. Integration tests run against a CML lab or a real COM port.
+      About 3,000 unit and 300 GUI tests. Every push to main runs GitHub Actions on Windows: lint, unit and GUI tests, and beside them a frozen build with self-tests, an MCP smoke test, and the installer. Integration tests run against a CML lab or a real COM port.
     </p>
     <p class="para">
-      <b>Stack:</b> Python 3.12, PySide6, Netmiko, Jinja2 (sandboxed), Pydantic v2, ruamel.yaml, keyring, the MCP Python SDK, PyInstaller, and Inno Setup.
+      <b>Stack:</b> Python 3.12, PySide6, Netmiko, pyserial, Jinja2 (sandboxed), Pydantic v2, ruamel.yaml, keyring, cryptography, the MCP Python SDK, PyInstaller, and Inno Setup.
     </p>
     <div class="links">
       <a class="link" href="https://github.com/jakobjonasson/tsunami" target="_blank" rel="noopener">GitHub</a>
+      <a class="link" href="https://github.com/jakobjonasson/tsunami/releases/latest" target="_blank" rel="noopener">Download installer</a>
       <a class="link" href="/">&lt;- back to portfolio</a>
     </div>
   </section>
